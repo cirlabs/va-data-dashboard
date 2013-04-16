@@ -42,16 +42,18 @@
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
-
+        <select id="change-field-type">
+            <option value="pending-claim">Pending Claims</option>
+            <option value="appealed-claims">Appealed Claims</option>
+            <option value="average-processing-time">Average Processing Time</option>
+            <option value="completed-claims">Completed Claims</option>
+            <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
+            <option value="employees-on-duty">Employees On Duty</option>
+            <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
+            <option value="claims-received">Claims Received</option>
+        </select>
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
-                    <h1 id="field-type-declaration">Pending Claims</h1>
-                </div>
-                <div id="me" class="span10">
-                    <!--Body content-->
-
-                </div>
+            <div id="put-stuff-here" class="row-fluid">
             </div>
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -61,34 +63,20 @@
         <script src="js/d3min.js"></script>
         <script src="js/underscore-min.js"></script>
         <script src="js/backbone-min.js"></script>
-        <script src="js/colorbrewer.js"></script>
         <script src="js/raphael.js"></script>
         <script src="js/chartz.js"></script>
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
-        <script src="https://raw.github.com/DmitryBaranovskiy/g.raphael/master/min/g.line-min.js"></script>
         <script>
-            $(document).ready(function(){
-                var fieldType = {
-                    'name': 'Pending Claims',
-                    'slug': 'pending-claim'
-                };
+            var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions){
+                $(chartsContainer).empty();
                 var lct = _.template($("#line-chart-template").html());
-                var options = {
-                    'fieldType': 'pending-claims',
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
+                var ftc = _.template($("#field-type-container").html());
+                var ftcData = {
+                    'fieldType': fieldType.name
                 };
-                var cityOptions = {
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
-                }
-                var graphOptions = {
-                    key: function(entry){return new Date(entry.get("report_date"));},
-                    value: function(entry){return entry.get('pending_claims');},
-                    strokeColor: 'white',
-                    fillOpacity: .05,
-                    radius: 0,
-                    bottom: 30 
-                };
+                $(chartsContainer).append(ftc(ftcData));
+                var itemsContainer = $("#put-chartz-here");
                 var getAxis = function(container, dim){
                     var yscale = d3.scale.linear()
                         .domain([dim.minY, dim.maxY])
@@ -107,7 +95,7 @@
                 var foundCitiesCb = function(){
                     var id = 0;
                     _.each(cities.models, function(city){
-                        var pendingClaimsCollection = new VaDataCollection([], options);
+                        var pendingClaimsCollection = new VaDataCollection([], fieldType);
                         var drawCharts = function(){
                             var divId = "line-chart-" + id++;
                             var templateData = {
@@ -115,7 +103,7 @@
                                 'divId': divId
                             };
                             var htmlInsert = lct(templateData);
-                            $("#me").append(htmlInsert);
+                            itemsContainer.append(htmlInsert);
                             var chart = cir.chartz.lineChart("#"+divId, pendingClaimsCollection.models, graphOptions);
                             getAxis("#"+divId, chart.dimensions);
                         };
@@ -123,11 +111,56 @@
                             'city__slug': city.get("slug"),
                             'limit': 100
                         };
+                        if(fieldType.options !== undefined){
+                            _.each(_.keys(fieldType.options), function(key){
+                                console.log(key);
+                                opts[key] = fieldType.options[key];
+                            });
+                        }
                         pendingClaimsCollection.fetch({success: drawCharts, data:opts});
                     });
                 };
                 cities.fetch({success: foundCitiesCb, data:{}});
-            });
+            };
+            $(document).ready(function(){
+                var aspireUri = 'http://glowing-sunset-5928.herokuapp.com/api/aspire/';
+                var graphOptions = {
+                    key: function(entry){return new Date(entry.get("report_date"));},
+                    value: function(entry){return entry.get('pending_claims');},
+                    strokeColor: 'white',
+                    fillOpacity: .05,
+                    radius: 0,
+                    bottom: 30 
+                };
+                var fieldTypeOptions = {
+                    'name': 'Pending Claims',
+                    'fieldType': 'pending-claim',
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
+                };
+                var cityOptions = {
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
+                };
+                buildCharts("#put-stuff-here", fieldTypeOptions, cityOptions, graphOptions);
+                $("#change-field-type").on("change", function(){
+                    var graphOpts = {
+                        key: function(entry){return new Date(entry.get("date"));},
+                        value: function(entry){return entry.get('value');},
+                        strokeColor: 'white',
+                        fillOpacity: .05,
+                        radius: 0,
+                        bottom: 30 
+                    };
+                    var element = $(this);
+                    var val = $(element).val();
+                    fieldTypeOptions.resourceUri = aspireUri;
+                    fieldTypeOptions.fieldType = val;
+                    fieldTypeOptions.name = val;
+                    fieldTypeOptions['options'] = {
+                        'field_type__slug': val
+                    };
+                    buildCharts("#put-stuff-here", fieldTypeOptions, cityOptions, graphOpts);
+                });
+            }); 
         </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -141,6 +174,13 @@
             <div class="line-chart-container">
                 <h1><%= cityName %></h1>
                 <div id="<%= divId %>" class="line-chart"></div>
+            </div>
+        </script>
+        <script type="text/template" id="field-type-container">
+            <div class="span2">
+                <h1 id="field-type-declaration"><%= fieldType %></h1>
+            </div>
+            <div id="put-chartz-here" class="span10">
             </div>
         </script>
     </body>
