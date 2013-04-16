@@ -20,13 +20,21 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <style>
             .line-chart-container{
-                height: 200px;
-                width: 600px;
+                height: 225px;
+                width: 100%;
                 text-align: center;
+                margin-bottom: 50px;
             }
             .line-chart{
-                height: 500px;
-                width: 500px;
+                height: 200px;
+                width: 100%;
+            }
+            .x-axis,
+            .y-axis path,
+            .y-axis line {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
             }
         </style>
     </head>
@@ -38,7 +46,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span2">
-                    <!--Sidebar content-->
+                    <h1 id="field-type-declaration">Pending Claims</h1>
                 </div>
                 <div id="me" class="span10">
                     <!--Body content-->
@@ -58,8 +66,13 @@
         <script src="js/chartz.js"></script>
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="https://raw.github.com/DmitryBaranovskiy/g.raphael/master/min/g.line-min.js"></script>
         <script>
             $(document).ready(function(){
+                var fieldType = {
+                    'name': 'Pending Claims',
+                    'slug': 'pending-claim'
+                };
                 var lct = _.template($("#line-chart-template").html());
                 var options = {
                     'fieldType': 'pending-claims',
@@ -73,7 +86,22 @@
                     value: function(entry){return entry.get('pending_claims');},
                     strokeColor: 'white',
                     fillOpacity: .05,
-                    left: 100,
+                    radius: 0,
+                    bottom: 30 
+                };
+                var getAxis = function(container, dim){
+                    var yscale = d3.scale.linear()
+                        .domain([dim.minY, dim.maxY])
+                        .range([dim.height + dim.top, dim.bottom]);
+                    var xscale = d3.scale.linear()
+                        .domain([dim.minX, dim.maxX])
+                        .range([dim.left + 40, dim.width - 40])
+                    var yOpts = {
+                        'text': '',
+                    };
+                    cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
+                    var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
+
                 };
                 var cities = new VaDataCollection([], cityOptions);
                 var foundCitiesCb = function(){
@@ -88,17 +116,17 @@
                             };
                             var htmlInsert = lct(templateData);
                             $("#me").append(htmlInsert);
-                            //var template = _.template(VaDashboard.templates.entryDetail);
                             var chart = cir.chartz.lineChart("#"+divId, pendingClaimsCollection.models, graphOptions);
+                            getAxis("#"+divId, chart.dimensions);
                         };
                         var opts = {
-                            'city__slug': city.get("slug")
+                            'city__slug': city.get("slug"),
+                            'limit': 100
                         };
                         pendingClaimsCollection.fetch({success: drawCharts, data:opts});
                     });
                 };
                 cities.fetch({success: foundCitiesCb, data:{}});
-
             });
         </script>
 

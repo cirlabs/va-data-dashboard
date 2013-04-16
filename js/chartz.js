@@ -74,18 +74,30 @@ var cir = {
                     .attr('y', options.y || 33)
                     .attr('dy', options.dy || ".71em")
                     .style("text-anchor", "end")
-                    .text(options.text || "Y AXIS");
+                    .text(options.text || "");
                 return yAxis;
             },
-            getXAxis: function(svg, scale, height){
+            getXAxis: function(svg, scale, height, options){
+                var formatTime = d3.time.format("%m/%Y");
+                var format = function(d) { return formatTime(new Date(d)); };
                 var xAxis = d3.svg.axis()
                 .scale(scale)
-                .orient("bottom");
+                .orient("bottom")
+                .tickFormat(format);
 
                 svg.append("g")
-                .attr("class", "x axis")
+                .attr("class", "x-axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+                .call(xAxis)
+                .selectAll("text")  
+                .attr('class', 'x-axis-text')
+                .style("text-anchor", "end")
+                .style('font-size', "75%")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function(d) {
+                    return "rotate(-25)" 
+                    });
 
                 return xAxis; 
             },
@@ -95,16 +107,13 @@ var cir = {
                 var minX = !isUNDEFINED(options.minX) ? options.minX : d3.min(data, options.invert === false ? options.KEY : options.VAL);
                 var maxX = !isUNDEFINED(options.maxX) ? options.maxX : d3.max(data, options.invert === false ? options.KEY : options.VAL);
                 var y0 = Math.max(-d3.min(data, options.VAL), d3.max(data, options.VAL));
-                if(minY < 0){
-                    minY= -y0;
-                    maxY = y0;
-                }else{minY = 0;}
+
 
                 options.top = !isUNDEFINED(options.top) ? options.top : 20;
                 options.right = !isUNDEFINED(options.right) ? options.right : 20;
                 options.bottom = !isUNDEFINED(options.bottom) ? options.bottom : 30;
                 options.left = !isUNDEFINED(options.left) ? options.left : 20;
-                options.barPadding = !isUNDEFINED(options.barPadding) ? options.barPadding : 0;  
+                options.barPadding = !isUNDEFINED(options.barPadding) ? options.barPadding : 0;
 
                 var WIDTH = !isUNDEFINED(options.width) ? options.width : container.width() - options.right - options.left,
                     HEIGHT = !isUNDEFINED(options.height) ? options.height :  container.height() - options.top - options.bottom,
@@ -116,7 +125,6 @@ var cir = {
                         .domain([minY, maxY])
                         .range([0, HEIGHT])
                         .nice();
-
                 var height = {
                     'false': function(d){
                         return YY(options.VAL(d));},
@@ -148,7 +156,7 @@ var cir = {
                     'xscale': XX,
                     'yscale': YY,
                     'barPadding': options.barPadding
-                }
+                };
 
                 return retval;
             },
@@ -736,13 +744,6 @@ var cir = {
             paper.dots = dots;
             paper.dimensions = dim;
 
-            if(!isUNDEFINED(options.axis) && options.axis === true){
-                yscale = d3.scale.linear()
-                        .domain([dim.minY, dim.maxY])
-                        .range([dim.height, dim.bottom]);
-                cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale);
-                cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), dim.xscale, $(container).height() - dim.bottom);
-            }
             options.KEYCOERCION = oldKeyCoercion;
             return paper;
         }
