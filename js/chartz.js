@@ -257,7 +257,12 @@ var cir = {
                         .attr("height", h);
 
             svg.append('g').attr('class', 'bars').selectAll("rect")
-               .data(data, function(d){d.height = dim.yscale(options.VAL(d)); d.width = colWidth;return d;})
+               .data(data, function(d, i){
+                d.height = dim.yscale(options.VAL(d));
+                d.width = colWidth;
+                if(options.dataRef !== undefined && options.dataRef.length == data.length)
+                    d.obj = options.dataRef[i];
+                return d;})
                .enter().append("g")
                .attr('class', 'bar')
                .append("rect")
@@ -271,13 +276,70 @@ var cir = {
                .style("fill", "#98abc5");
 
             return {'svg':svg, 'options': options, 'dimensions': dim};
-        }, 
+        },
+        representValuesColumn: function(container, data, opts){
+            var options = cir.chartz.utils.getOptions(opts);
+            var dim = cir.chartz.utils.getLinearDimensions($(container), data, options);
+
+            var valueWidth = !isUNDEFINED(options.valueWidth) ? options.valueWidth : 5;
+            var valueHeight = !isUNDEFINED(options.valueHeight) ? options.valueHeight : 5;
+            var valueSpacing = !isUNDEFINED(options.valueSpacing) ? options.valueSpacing: 2;
+            var valueColor = !isUNDEFINED(options.valueColor) ? options.valueColor : 'red';
+            var valueBorderW = !isUNDEFINED(options.valueBorderW) ? options.valueBorderW : 2;
+            var valuesPerElement = !isUNDEFINED(options.valuesPerElement) ? options.valuesPerElement : 50;
+
+            var valueSpace = valueBorderW;
+
+            var w = dim.width + dim.left + dim.right;
+            var h = dim.height + dim.top + dim.bottom;
+            var minNumElements = Math.floor(data / valuesPerElement);
+
+            var eleHW = Math.floor(Math.sqrt(w*h/minNumElements));
+
+            var elementsPerCol = Math.floor(w / eleHW);
+            var elementsPerRow = Math.floor(h / eleHW);
+
+            $('<style type="text/css"> '+container+' .table-column-ele{margin:.75px;border-radius:50%;display:inline-block;background-color:'+ valueColor+';width:'+(eleHW-valueSpace)+'px;height:'+(eleHW-valueSpace)+'px;}</style>"').appendTo("head");
+            $('<style type="text/css"> '+container+' .table-row{width:'+w+'px;height:'+eleHW+'px;}</style>').appendTo("head");
+            $('<style type="text/css"> '+container+' .table-container{width:'+w+'px;height:'+h+'px;}</style>').appendTo("head");
+            var table = $('<div/>', {
+                "class": "table-container"
+            });
+            var totalRow = 0;
+            var totalCnt = 0;
+            for(var i = 0; i < elementsPerRow; i++){
+                var row = $('<div/>', {
+                    "class": "table-row"
+                });
+                for(var x = 0; x < elementsPerCol; x++){
+                    var column = $('<div/>', {
+                        "class": "table-column-ele"
+                    });
+                    row.append(column);
+                    totalCnt++;
+                }
+                table.append(row);
+            }
+            $(container).append(table);
+
+            return {'table':table, 'options': options, 'dimensions': dim, 'actualBlocksPerElement': totalCnt};
+        },
         d3bar: function(container, data, opts){
             var options = cir.chartz.utils.getOptions(opts);
             var dim = cir.chartz.utils.getLinearDimensions($(container), data, options);
             var colWidth = (dim.width / data.length) - dim.barPadding;
             var colSpace = dim.width / data.length;
             var colCenterOffset = dim.barPadding / 2;
+
+            dim.columnSpace = colSpace;
+            dim.columnWidth = colWidth;
+            dim.columnCenterOffset = colCenterOffset;
+
+            var colorKey = !isUNDEFINED(options.colorKey) ? options.colorKey : options.KEY;
+            var colorDomain = !isUNDEFINED(options.colorDomain) ? options.colorDomain : cir.chartz.utils.mapColorDomain(data, options);
+            var colorRange = !isUNDEFINED(options.colorRange) ? options.colorRange : colorbrewer.YlGnBu[3];
+            var color = d3.scale.ordinal().range(colorRange).domain(colorDomain);
+
 
             var w = dim.width + dim.left + dim.right;
             var h = dim.height + dim.top + dim.bottom;
@@ -287,18 +349,22 @@ var cir = {
                         .attr("width", w)
                         .attr("height", h);
 
-            svg.append('g').attr('class', 'bars').selectAll("rect")
-               .data(data, function(d){d.height = dim.yscale(options.VAL(d)); d.width = colWidth;return d;})
+            dim.columnCalculator = function(idx){
+                return this.left + this.columnCenterOffset + (this.columnSpace * idx);
+            };
+
+            svg.append('g').attr('class', 'bars')
+               .selectAll("rect")
+               .data(data)
                .enter().append("g")
                .attr('class', 'bar')
                .append("rect")
-               .attr("x", function(d, i){return dim.left + colCenterOffset + (colSpace * i);})
-               .attr("y", function(d){
-                return dim.yPosition(d);})
+               .attr("y", function(d){return dim.yPosition(d);})
+               .attr("x", function(d, i){return dim.columnCalculator(i);})
                .attr("width", colWidth)
-               .attr("height", function(d){
-                return dim.heightScaler(d);})
-               .style("fill", "#98abc5");
+               .attr("height", function(d){return dim.heightScaler(d);})
+               .style("fill", function(d, i) { 
+                    return color(colorKey(d)); })
 
             return {'svg':svg, 'options': options, 'dimensions': dim};
         },

@@ -18,6 +18,17 @@
         <!-- Bootstrap -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <style>
+            .line-chart-container{
+                height: 200px;
+                width: 600px;
+                text-align: center;
+            }
+            .line-chart{
+                height: 500px;
+                width: 500px;
+            }
+        </style>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -28,11 +39,10 @@
             <div class="row-fluid">
                 <div class="span2">
                     <!--Sidebar content-->
-                    hmmm
                 </div>
-                <div class="span10">
+                <div id="me" class="span10">
                     <!--Body content-->
-                    blam
+
                 </div>
             </div>
         </div>
@@ -43,19 +53,52 @@
         <script src="js/d3min.js"></script>
         <script src="js/underscore-min.js"></script>
         <script src="js/backbone-min.js"></script>
+        <script src="js/colorbrewer.js"></script>
+        <script src="js/raphael.js"></script>
+        <script src="js/chartz.js"></script>
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
             $(document).ready(function(){
+                var lct = _.template($("#line-chart-template").html());
                 var options = {
                     'fieldType': 'pending-claims',
-                    'resourceUri': 'http://localhost:8000/api/pending-claim/'
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
                 };
-                var collection = new VaDataCollection([], options);
-                var callback = function(){
-                    console.log(collection);
+                var cityOptions = {
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
+                }
+                var graphOptions = {
+                    key: function(entry){return new Date(entry.get("report_date"));},
+                    value: function(entry){return entry.get('pending_claims');},
+                    strokeColor: 'white',
+                    fillOpacity: .05,
+                    left: 100,
                 };
-                collection.fetch({success: callback, data:{}});
+                var cities = new VaDataCollection([], cityOptions);
+                var foundCitiesCb = function(){
+                    var id = 0;
+                    _.each(cities.models, function(city){
+                        var pendingClaimsCollection = new VaDataCollection([], options);
+                        var drawCharts = function(){
+                            var divId = "line-chart-" + id++;
+                            var templateData = {
+                                'cityName': city.get('name'),
+                                'divId': divId
+                            };
+                            var htmlInsert = lct(templateData);
+                            $("#me").append(htmlInsert);
+                            //var template = _.template(VaDashboard.templates.entryDetail);
+                            var chart = cir.chartz.lineChart("#"+divId, pendingClaimsCollection.models, graphOptions);
+                        };
+                        var opts = {
+                            'city__slug': city.get("slug")
+                        };
+                        pendingClaimsCollection.fetch({success: drawCharts, data:opts});
+                    });
+                };
+                cities.fetch({success: foundCitiesCb, data:{}});
+
             });
         </script>
 
@@ -65,6 +108,12 @@
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        <script type="text/template" id="line-chart-template">
+            <div class="line-chart-container">
+                <h1><%= cityName %></h1>
+                <div id="<%= divId %>" class="line-chart"></div>
+            </div>
         </script>
     </body>
 </html>

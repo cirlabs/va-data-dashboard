@@ -1,9 +1,11 @@
 try{VaDashboard = VaDashboard;}catch(err){VaDashboard = {};}
 VaDashboard.events = VaDashboard.events !== undefined ? VaDashboard.events : _.extend({}, Backbone.Events);
 VaDashboard.templates = VaDashboard.templates !== undefined ? VaDashboard.templates : {};
+
 var VaData = Backbone.Model.extend({
     initialize: function(attributes){
         this.attributes = attributes;
+        VaDashboard.events.trigger('dataPointCreated', {model: this});
     },
     url: function(){
         return this.attributes.resource_uri;
