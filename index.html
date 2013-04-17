@@ -83,11 +83,12 @@
                         .range([dim.height + dim.top, dim.bottom]);
                     var xscale = d3.scale.linear()
                         .domain([dim.minX, dim.maxX])
-                        .range([dim.left + 40, dim.width - 40])
+                        .range([dim.startXPos, dim.endXPos])
                     var yOpts = {
                         'text': '',
                     };
                     cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
+                    console.log(dim);
                     var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
 
                 };
@@ -95,7 +96,7 @@
                 var foundCitiesCb = function(){
                     var id = 0;
                     _.each(cities.models, function(city){
-                        var pendingClaimsCollection = new VaDataCollection([], fieldType);
+                        var vaDataCollection = new VaDataCollection([], fieldType);
                         var drawCharts = function(){
                             var divId = "line-chart-" + id++;
                             var templateData = {
@@ -104,7 +105,7 @@
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
-                            var chart = cir.chartz.lineChart("#"+divId, pendingClaimsCollection.models, graphOptions);
+                            var chart = cir.chartz.lineChart("#"+divId, vaDataCollection.models, graphOptions);
                             getAxis("#"+divId, chart.dimensions);
                         };
                         var opts = {
@@ -113,52 +114,64 @@
                         };
                         if(fieldType.options !== undefined){
                             _.each(_.keys(fieldType.options), function(key){
-                                console.log(key);
                                 opts[key] = fieldType.options[key];
                             });
                         }
-                        pendingClaimsCollection.fetch({success: drawCharts, data:opts});
+                        vaDataCollection.fetch({success: drawCharts, data:opts});
                     });
                 };
                 cities.fetch({success: foundCitiesCb, data:{}});
             };
             $(document).ready(function(){
-                var aspireUri = 'http://glowing-sunset-5928.herokuapp.com/api/aspire/';
-                var graphOptions = {
-                    key: function(entry){return new Date(entry.get("report_date"));},
-                    value: function(entry){return entry.get('pending_claims');},
-                    strokeColor: 'white',
-                    fillOpacity: .05,
-                    radius: 0,
-                    bottom: 30 
-                };
-                var fieldTypeOptions = {
-                    'name': 'Pending Claims',
-                    'fieldType': 'pending-claim',
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
-                };
-                var cityOptions = {
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
-                };
-                buildCharts("#put-stuff-here", fieldTypeOptions, cityOptions, graphOptions);
-                $("#change-field-type").on("change", function(){
-                    var graphOpts = {
-                        key: function(entry){return new Date(entry.get("date"));},
-                        value: function(entry){return entry.get('value');},
+                var pendingClaimsSettings = {
+                    fieldTypeOptions: {
+                        'name': 'Pending Claims',
+                        'fieldType': 'pending-claim',
+                        'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
+                    },
+                    graphOptions: {
+                        key: function(entry){return new Date(entry.get("report_date"));},
+                        value: function(entry){return entry.get('pending_claims');},
                         strokeColor: 'white',
                         fillOpacity: .05,
                         radius: 0,
                         bottom: 30 
-                    };
+                    }
+                };
+                var aspireSettings = {
+                    fieldTypeOptions: {
+                        'name': 'Pending Claims',
+                        'fieldType': 'pending-claim',
+                        'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/aspire/',
+                        'options': {
+                            'field_type__slug': ''
+                        }
+                    },
+                    graphOptions: {
+                        key: function(entry){return new Date(entry.get("date"));},
+                        value: function(entry){return entry.get('value');},
+                        strokeColor: 'white',
+                        fillOpacity: .05,
+                        radius: 1,
+                        bottom: 30 
+                    }
+                };
+                var cityOptions = {
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
+                };
+                buildCharts("#put-stuff-here", pendingClaimsSettings.fieldTypeOptions, cityOptions, pendingClaimsSettings.graphOptions);
+                $("#change-field-type").on("change", function(){
                     var element = $(this);
                     var val = $(element).val();
-                    fieldTypeOptions.resourceUri = aspireUri;
-                    fieldTypeOptions.fieldType = val;
-                    fieldTypeOptions.name = val;
-                    fieldTypeOptions['options'] = {
-                        'field_type__slug': val
-                    };
-                    buildCharts("#put-stuff-here", fieldTypeOptions, cityOptions, graphOpts);
+                    if(val === 'pending-claim'){
+                        buildCharts("#put-stuff-here", pendingClaimsSettings.fieldTypeOptions, cityOptions, pendingClaimsSettings.graphOptions);
+                        return false;
+                    }
+                    aspireSettings.fieldTypeOptions.name = val;
+                    aspireSettings.fieldTypeOptions.fieldType = val;
+                    aspireSettings.fieldTypeOptions.options.field_type__slug = val;
+                    buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                    return false;
                 });
             }); 
         </script>

@@ -723,6 +723,7 @@ var cir = {
             data.forEach(function(d){
                 var x = dim.xscale(options.KEY(d)),
                     y = (dim.height + dim.top) - dim.yscale(options.VAL(d));
+                console.log(options.KEY(d), x);
                 points.push({x: x, y: y});
                 var dot = paper.circle(x, y);
                     dot.data('key', options.KEY(d));
@@ -741,6 +742,8 @@ var cir = {
                 .attr("stroke", "none")
                 .attr("r", !isUNDEFINED(options.radius) ? options.radius : 3.5);
 
+            dim.startXPos = dots[0].attr().cx;
+            dim.endXPos = dots[dots.length -1].attr().cx;
             paper.dots = dots;
             paper.dimensions = dim;
 
