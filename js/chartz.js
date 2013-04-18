@@ -63,7 +63,7 @@ var cir = {
                 var yAxis = d3.svg.axis()
                     .scale(scale)
                     .orient(options.orientation || "right")
-                    .tickFormat(options.tickFormat || d3.format(".2s"))
+                    .tickFormat(options.tickFormat || d3.format(",.0f"))
 
                 svg.append("g")
                     .attr('transform', options.transform || "translate(0,0)")
