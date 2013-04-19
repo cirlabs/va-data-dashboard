@@ -743,6 +743,8 @@ var cir = {
 
             dim.startXPos = dots[0].attr().cx;
             dim.endXPos = dots[dots.length -1].attr().cx;
+            dim.tallestY = d3.max(dots, function(entry){return entry.attr().cy;});
+            dim.shortestY = d3.min(dots, function(entry){return entry.attr().cy;});
             paper.dots = dots;
             paper.dimensions = dim;
             paper.line = line;

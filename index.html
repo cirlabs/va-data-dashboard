@@ -36,6 +36,12 @@
               stroke: #000;
               shape-rendering: crispEdges;
             }
+            .chart-details{
+                position: absolute;
+                text-align: center;
+                width: 100%;
+
+            }
         </style>
     </head>
     <body>
@@ -73,6 +79,8 @@
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
                 var detailsTemplate = _.template($("#details-template").html());
+                var formatTime = d3.time.format("%m/%d/%Y");
+                var commaFormat = d3.format(",1f");
                 var ftcData = {
                     'fieldType': fieldType.name
                 };
@@ -81,7 +89,7 @@
                 var getAxis = function(container, dim){
                     var yscale = d3.scale.linear()
                         .domain([dim.minY, dim.maxY])
-                        .range([dim.height + dim.top, dim.bottom]);
+                        .range([dim.tallestY, dim.shortestY]);
                     var xscale = d3.scale.linear()
                         .domain([dim.minX, dim.maxX])
                         .range([dim.startXPos, dim.endXPos])
@@ -119,17 +127,17 @@
                             });
                             var lastSelected = null;
                             chart.dots.forEach(function(b){
-                                b.mouseover(function(){
-                                    this.animate({
+                                var doAction = function(dot){
+                                    dot.animate({
                                         'stroke-width': '4',
                                         'stroke': 'red',
                                     }, 50);
                                     var detailsData = {
-                                        date: b.data('key'),
-                                        value: b.data('value'),
+                                        date: formatTime(b.data('key')),
+                                        value: commaFormat(b.data('value')),
                                         type: fieldType.fieldType
                                     };
-                                    var ele = $("#"+divId).parent().children()[2];
+                                    var ele = $("#"+divId).parent().children()[1];
                                     $(ele).html(detailsTemplate(detailsData));
                                     if(lastSelected !== null){
                                         lastSelected.animate({
@@ -137,14 +145,17 @@
                                             'stroke': 'black',
                                         }, 50);
                                     }
-                                    lastSelected = this;
+                                    lastSelected = dot;
+                                };
+                                b.mouseover(function(){
+                                    doAction(this);
                                 });
                             });
                         };
                         //set up query to ask for data type and by city
                         var opts = {
                             'city__slug': city.get("slug"),
-                            'limit': 100,
+                            'limit': 130,
                             'field_type__slug': fieldType.fieldType
                         };
                         vaDataCollection.fetch({success: drawCharts, data:opts});
@@ -221,8 +232,8 @@
         <script type="text/template" id="line-chart-template">
             <div class="line-chart-container">
                 <h1><%= cityName %></h1>
+                <div class="chart-details"></div>
                 <div id="<%= divId %>" class="line-chart"></div>
-                <div class="chart-detials"></div>
             </div>
         </script>
         <script type="text/template" id="field-type-container">
@@ -233,11 +244,7 @@
             </div>
         </script>
         <script type="text/template" id="details-template">
-            <ul>
-                <li><%= type %></li>
-                <li><%= date %></li>
-                <li><%= value %></li>
-            </ul>
+            <%= date %>: <%= value %>
         </script>
     </body>
 </html>
