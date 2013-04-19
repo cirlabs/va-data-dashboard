@@ -723,7 +723,6 @@ var cir = {
             data.forEach(function(d){
                 var x = dim.xscale(options.KEY(d)),
                     y = (dim.height + dim.top) - dim.yscale(options.VAL(d));
-                console.log(options.KEY(d), x);
                 points.push({x: x, y: y});
                 var dot = paper.circle(x, y);
                     dot.data('key', options.KEY(d));
@@ -746,6 +745,7 @@ var cir = {
             dim.endXPos = dots[dots.length -1].attr().cx;
             paper.dots = dots;
             paper.dimensions = dim;
+            paper.line = line;
 
             options.KEYCOERCION = oldKeyCoercion;
             return paper;

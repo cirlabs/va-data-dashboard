@@ -88,9 +88,7 @@
                         'text': '',
                     };
                     cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
-                    console.log(dim);
                     var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
-
                 };
                 var cities = new VaDataCollection([], cityOptions);
                 var foundCitiesCb = function(){
@@ -107,69 +105,84 @@
                             itemsContainer.append(htmlInsert);
                             var chart = cir.chartz.lineChart("#"+divId, vaDataCollection.models, graphOptions);
                             getAxis("#"+divId, chart.dimensions);
+                            $("#"+divId).on('mouseover', function(e){
+                                chart.dots.animate({
+                                    'r': 5
+                                }, 50);
+                            });
+                            $("#"+divId).on('mouseout', function(e){
+                                chart.dots.animate({
+                                    'r': 0
+                                }, 50);
+                            });
+                            chart.dots.forEach(function(b){
+                                b.on('mouseover', function(){
+                                    console.log(this);
+                                });
+                            });
                         };
                         var opts = {
                             'city__slug': city.get("slug"),
-                            'limit': 100
+                            'limit': 100,
+                            'field_type__slug': fieldType.fieldType
                         };
-                        if(fieldType.options !== undefined){
-                            _.each(_.keys(fieldType.options), function(key){
-                                opts[key] = fieldType.options[key];
-                            });
-                        }
                         vaDataCollection.fetch({success: drawCharts, data:opts});
                     });
                 };
-                cities.fetch({success: foundCitiesCb, data:{}});
+                cities.fetch({success: foundCitiesCb, data:cityOptions.options});
             };
             $(document).ready(function(){
-                var pendingClaimsSettings = {
-                    fieldTypeOptions: {
-                        'name': 'Pending Claims',
-                        'fieldType': 'pending-claim',
-                        'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/pending-claim/'
-                    },
-                    graphOptions: {
-                        key: function(entry){return new Date(entry.get("report_date"));},
-                        value: function(entry){return entry.get('pending_claims');},
-                        strokeColor: 'white',
-                        fillOpacity: .05,
-                        radius: 0,
-                        bottom: 30 
-                    }
-                };
                 var aspireSettings = {
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
                         'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/aspire/',
-                        'options': {
-                            'field_type__slug': ''
-                        }
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
                         value: function(entry){return entry.get('value');},
                         strokeColor: 'white',
                         fillOpacity: .05,
-                        radius: 1,
+                        radius: 0,
                         bottom: 30 
                     }
                 };
                 var cityOptions = {
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/'
+                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/',
+                    'options': {}
                 };
-                buildCharts("#put-stuff-here", pendingClaimsSettings.fieldTypeOptions, cityOptions, pendingClaimsSettings.graphOptions);
+                var Workspace = Backbone.Router.extend({
+                    routes: {
+                        "": "home",
+                        "city/:slug": "cityDisplay",
+                        "field-type/:fieldType": "displayField",
+                        "field-type/:fieldType/city/:slug": "displayCityField"
+                    },
+                    home: function(){
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                    },
+                    cityDisplay: function(slug){
+                        cityOptions.options = {'slug': slug};
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);                        
+                    },
+                    displayField: function(fieldType){
+                        $("#change-field-type").val(fieldType);
+                        aspireSettings.fieldTypeOptions.name = fieldType;
+                        aspireSettings.fieldTypeOptions.fieldType = fieldType;
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                    },
+                    displayCityField: function(fieldType, slug){
+                        cityOptions.options = {'slug': slug};
+                        this.displayField(fieldType);
+                    }
+                });
+                var workspace = new Workspace();
+                Backbone.history.start();
                 $("#change-field-type").on("change", function(){
                     var element = $(this);
                     var val = $(element).val();
-                    if(val === 'pending-claim'){
-                        buildCharts("#put-stuff-here", pendingClaimsSettings.fieldTypeOptions, cityOptions, pendingClaimsSettings.graphOptions);
-                        return false;
-                    }
                     aspireSettings.fieldTypeOptions.name = val;
                     aspireSettings.fieldTypeOptions.fieldType = val;
-                    aspireSettings.fieldTypeOptions.options.field_type__slug = val;
                     buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     return false;
                 });
