@@ -72,6 +72,7 @@
                 $(chartsContainer).empty();
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
+                var detailsTemplate = _.template($("#details-template").html());
                 var ftcData = {
                     'fieldType': fieldType.name
                 };
@@ -95,6 +96,7 @@
                     var id = 0;
                     _.each(cities.models, function(city){
                         var vaDataCollection = new VaDataCollection([], fieldType);
+                        //using closures to simplify code
                         var drawCharts = function(){
                             var divId = "line-chart-" + id++;
                             var templateData = {
@@ -107,7 +109,7 @@
                             getAxis("#"+divId, chart.dimensions);
                             $("#"+divId).on('mouseover', function(e){
                                 chart.dots.animate({
-                                    'r': 5
+                                    'r': 3,
                                 }, 50);
                             });
                             $("#"+divId).on('mouseout', function(e){
@@ -115,12 +117,31 @@
                                     'r': 0
                                 }, 50);
                             });
+                            var lastSelected = null;
                             chart.dots.forEach(function(b){
-                                b.on('mouseover', function(){
-                                    console.log(this);
+                                b.mouseover(function(){
+                                    this.animate({
+                                        'stroke-width': '4',
+                                        'stroke': 'red',
+                                    }, 50);
+                                    var detailsData = {
+                                        date: b.data('key'),
+                                        value: b.data('value'),
+                                        type: fieldType.fieldType
+                                    };
+                                    var ele = $("#"+divId).parent().children()[2];
+                                    $(ele).html(detailsTemplate(detailsData));
+                                    if(lastSelected !== null){
+                                        lastSelected.animate({
+                                            'stroke-width': '0',
+                                            'stroke': 'black',
+                                        }, 50);
+                                    }
+                                    lastSelected = this;
                                 });
                             });
                         };
+                        //set up query to ask for data type and by city
                         var opts = {
                             'city__slug': city.get("slug"),
                             'limit': 100,
@@ -129,6 +150,7 @@
                         vaDataCollection.fetch({success: drawCharts, data:opts});
                     });
                 };
+                //get all the cities
                 cities.fetch({success: foundCitiesCb, data:cityOptions.options});
             };
             $(document).ready(function(){
@@ -144,7 +166,7 @@
                         strokeColor: 'white',
                         fillOpacity: .05,
                         radius: 0,
-                        bottom: 30 
+                        bottom: 50 
                     }
                 };
                 var cityOptions = {
@@ -200,6 +222,7 @@
             <div class="line-chart-container">
                 <h1><%= cityName %></h1>
                 <div id="<%= divId %>" class="line-chart"></div>
+                <div class="chart-detials"></div>
             </div>
         </script>
         <script type="text/template" id="field-type-container">
@@ -208,6 +231,13 @@
             </div>
             <div id="put-chartz-here" class="span10">
             </div>
+        </script>
+        <script type="text/template" id="details-template">
+            <ul>
+                <li><%= type %></li>
+                <li><%= date %></li>
+                <li><%= value %></li>
+            </ul>
         </script>
     </body>
 </html>

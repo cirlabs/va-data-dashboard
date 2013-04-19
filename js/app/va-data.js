@@ -5,6 +5,8 @@ VaDashboard.templates = VaDashboard.templates !== undefined ? VaDashboard.templa
 var VaData = Backbone.Model.extend({
     initialize: function(attributes){
         this.attributes = attributes;
+        //if you wanna do something when a data point is found
+        //listen to this event
         VaDashboard.events.trigger('dataPointCreated', {model: this});
     },
     url: function(){
@@ -18,6 +20,7 @@ var VaDataCollection = Backbone.Collection.extend({
         this.resourceUri = options.resourceUri;
     },
     sync: function(method, model, options) {
+        //jsonp to call from other domains
         var params = _.extend({
             type: 'GET',
             dataType: 'jsonp',

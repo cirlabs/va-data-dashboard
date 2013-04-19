@@ -78,7 +78,7 @@ var cir = {
                 return yAxis;
             },
             getXAxis: function(svg, scale, height, options){
-                var formatTime = d3.time.format("%m/%Y");
+                var formatTime = d3.time.format("%m/%d/%Y");
                 var format = function(d) { return formatTime(new Date(d)); };
                 var xAxis = d3.svg.axis()
                 .scale(scale)
