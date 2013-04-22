@@ -725,8 +725,7 @@ var cir = {
                     y = (dim.height + dim.top) - dim.yscale(options.VAL(d));
                 points.push({x: x, y: y});
                 var dot = paper.circle(x, y);
-                    dot.data('key', options.KEY(d));
-                    dot.data('value', options.VAL(d));
+                dot.data('obj', d);
                 dots.push(dot);
             });
 

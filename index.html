@@ -17,10 +17,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <style>
+            body{
+                font-family: 'Quicksand', sans-serif;
+            }
             .line-chart-container{
-                height: 225px;
+                height: 250px;
                 width: 100%;
                 text-align: center;
                 margin-bottom: 50px;
@@ -37,10 +41,19 @@
               shape-rendering: crispEdges;
             }
             .chart-details{
-                position: absolute;
                 text-align: center;
-                width: 100%;
-
+            }
+            .details-container{
+                height: 100px;
+            }
+            .twitter{
+                display: inline;
+            }
+            .facebook{
+                display: inline;
+            }
+            .deep-link{
+                display: inline; 
             }
         </style>
     </head>
@@ -58,6 +71,14 @@
             <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
             <option value="claims-received">Claims Received</option>
         </select>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=132206816830554";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
         <div class="container-fluid">
             <div id="put-stuff-here" class="row-fluid">
             </div>
@@ -73,12 +94,13 @@
         <script src="js/chartz.js"></script>
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://platform.twitter.com/widgets.js"></script>
         <script>
             var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions){
                 $(chartsContainer).empty();
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
-                var detailsTemplate = _.template($("#details-template").html());
+                //var detailsTemplate = _.template($("#details-template").html());
                 var formatTime = d3.time.format("%m/%d/%Y");
                 var commaFormat = d3.format(",1f");
                 var ftcData = {
@@ -106,10 +128,12 @@
                         var vaDataCollection = new VaDataCollection([], fieldType);
                         //using closures to simplify code
                         var drawCharts = function(){
-                            var divId = "line-chart-" + id++;
+                            var divId = "line-chart-" + id;
+                            var detailsDivId = "details-" +  id++;
                             var templateData = {
                                 'cityName': city.get('name'),
-                                'divId': divId
+                                'divId': divId,
+                                'detailsDivId': detailsDivId
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -132,13 +156,10 @@
                                         'stroke-width': '4',
                                         'stroke': 'red',
                                     }, 50);
-                                    var detailsData = {
-                                        date: formatTime(b.data('key')),
-                                        value: commaFormat(b.data('value')),
-                                        type: fieldType.fieldType
-                                    };
-                                    var ele = $("#"+divId).parent().children()[1];
-                                    $(ele).html(detailsTemplate(detailsData));
+                                    var ele = "#" + detailsDivId;
+                                    var html = b.data('obj').getDetailTemplate(formatTime, commaFormat)
+                                    $(ele).html(html);
+
                                     if(lastSelected !== null){
                                         lastSelected.animate({
                                             'stroke-width': '0',
@@ -231,8 +252,23 @@
         </script>
         <script type="text/template" id="line-chart-template">
             <div class="line-chart-container">
-                <h1><%= cityName %></h1>
-                <div class="chart-details"></div>
+                <div class="details-container">
+                    <h1><%= cityName %></h1>
+                    <div class="share">
+                        <div class="twitter">
+                            <iframe allowtransparency="true" frameborder="0" scrolling="no"
+                                    src="https://platform.twitter.com/widgets/tweet_button.html"
+                                    style="width:130px; height:20px;"></iframe> 
+                       </div>
+                        <div class="facebook">
+                            <div class="fb-like" data-href="http://localhost:8000" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" data-font="lucida grande" data-action="recommend"></div>
+                        </div>
+                        <div class="deep-link">
+                            <a href="#">mylink</a>
+                        </div>
+                    </div>
+                    <div id="<%= detailsDivId %>" class="chart-details">Hover or touch the line for more details</div>
+                </div>
                 <div id="<%= divId %>" class="line-chart"></div>
             </div>
         </script>
@@ -242,9 +278,6 @@
             </div>
             <div id="put-chartz-here" class="span10">
             </div>
-        </script>
-        <script type="text/template" id="details-template">
-            <%= date %>: <%= value %>
         </script>
     </body>
 </html>
