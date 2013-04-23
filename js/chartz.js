@@ -740,8 +740,8 @@ var cir = {
                 .attr("stroke", "none")
                 .attr("r", !isUNDEFINED(options.radius) ? options.radius : 3.5);
 
-            dim.startXPos = dots[0].attr().cx;
-            dim.endXPos = dots[dots.length -1].attr().cx;
+            dim.startXPos = dots.length > 0 ? dots[0].attr().cx : 0;
+            dim.endXPos = dots.length > 0 ? dots[dots.length -1].attr().cx : 0;
             dim.tallestY = d3.max(dots, function(entry){return entry.attr().cy;});
             dim.shortestY = d3.min(dots, function(entry){return entry.attr().cy;});
             paper.dots = dots;

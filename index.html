@@ -97,17 +97,16 @@
         <script src="http://platform.twitter.com/widgets.js"></script>
         <script>
             var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions){
-                $(chartsContainer).empty();
+                window.stop();//cancel any unfinished requests
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
-                //var detailsTemplate = _.template($("#details-template").html());
-                var formatTime = d3.time.format("%m/%d/%Y");
-                var commaFormat = d3.format(",1f");
+                $(chartsContainer).empty();
                 var ftcData = {
                     'fieldType': fieldType.name
                 };
                 $(chartsContainer).append(ftc(ftcData));
-                var itemsContainer = $("#put-chartz-here");
+                var formatTime = d3.time.format("%m/%d/%Y");
+                var commaFormat = d3.format(",1f");
                 var getAxis = function(container, dim){
                     var yscale = d3.scale.linear()
                         .domain([dim.minY, dim.maxY])
@@ -123,6 +122,7 @@
                 };
                 var cities = new VaDataCollection([], cityOptions);
                 var foundCitiesCb = function(){
+                    var itemsContainer = $("#put-chartz-here");
                     var id = 0;
                     _.each(cities.models, function(city){
                         var vaDataCollection = new VaDataCollection([], fieldType);
@@ -198,12 +198,15 @@
                         strokeColor: 'white',
                         fillOpacity: .05,
                         radius: 0,
-                        bottom: 50 
+                        bottom: 50,
+                        left: 50
                     }
                 };
                 var cityOptions = {
                     'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/',
-                    'options': {}
+                    'options': {
+                        limit: 130
+                    }
                 };
                 var Workspace = Backbone.Router.extend({
                     routes: {
@@ -235,7 +238,8 @@
                 $("#change-field-type").on("change", function(){
                     var element = $(this);
                     var val = $(element).val();
-                    aspireSettings.fieldTypeOptions.name = val;
+                    var title = $(element).find('option:selected').text()
+                    aspireSettings.fieldTypeOptions.name = title;
                     aspireSettings.fieldTypeOptions.fieldType = val;
                     buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     return false;
@@ -255,6 +259,7 @@
                 <div class="details-container">
                     <h1><%= cityName %></h1>
                     <div class="share">
+                        <!--
                         <div class="twitter">
                             <iframe allowtransparency="true" frameborder="0" scrolling="no"
                                     src="https://platform.twitter.com/widgets/tweet_button.html"
@@ -263,6 +268,7 @@
                         <div class="facebook">
                             <div class="fb-like" data-href="http://localhost:8000" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" data-font="lucida grande" data-action="recommend"></div>
                         </div>
+                        -->
                         <div class="deep-link">
                             <a href="#">mylink</a>
                         </div>
