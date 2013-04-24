@@ -19,6 +19,7 @@
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,700' rel='stylesheet' type='text/css'>
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <link rel="stylesheet" href="css/font-awesome.min.css">
         <style>
             body{
                 font-family: 'Open Sans', sans-serif;
@@ -46,15 +47,6 @@
             .details-container{
                 height: 100px;
             }
-            .twitter{
-                display: inline;
-            }
-            .facebook{
-                display: inline;
-            }
-            .deep-link{
-                display: inline; 
-            }
             .embed-box{
                 display: none;
                 border: 1px solid black;
@@ -80,6 +72,9 @@
                 top: 10px;
             }
             .share{
+            }
+            .deep-link{
+                display: inline; 
             }
         </style>
     </head>
@@ -192,7 +187,6 @@
                             $("#"+divId).on('mousemove', function(e){
                                 var parentOffset = $(this).parent().offset();
                                 var relX = e.pageX - parentOffset.left;
-                                console.log(e);
                                 var dot = _.find(chart.dots, function(dot){
                                     if(lastDot !== null){
                                         if(relX > lastDot.attr().cx && relX <= dot.attr().cx){
@@ -314,14 +308,14 @@
                 <div class="details-container">
                     <h1><%= cityName %></h1>
                     <div class="share">
-                        <div class="twitter">
-                            <iframe allowtransparency="true" frameborder="0" scrolling="no"
-                                    src="https://platform.twitter.com/widgets/tweet_button.html?url=<%= shareUrl %>&text=Explore data about the veterans backlog near you at <%= shareUrl %>&via=cironline"
-                                    style="width:130px; height:20px;"></iframe> 
+                        <div class="share-item">
+                            <a href="https://twitter.com/share">
+                                <i class="icon-twitter icon-28x"></i> tweet
+                            </a>
                        </div>
-                        <div class="deep-link">
+                        <div class="share-item">
                             <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
-                                <img src="img/embed.png" alt="Embed this graph">
+                                <i class="icon-share icon-28x"></i> embed this graph
                             </a>
                             <div id="embed-<%= detailsDivId %>" class="embed-box">
                                 <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
@@ -329,8 +323,9 @@
                                 <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="400px"></iframe>'>
                             </div>
                         </div>
-                        <div class="deep-link">
-                            <a href="<%= dataUrl %>">download the data</a>
+                        <div class="share-item">
+                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> download the data
+                            </a>
                         </div>
                     </div>
                     <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details</div>
