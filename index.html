@@ -79,6 +79,8 @@
                 right: 15px;
                 top: 10px;
             }
+            .share{
+            }
         </style>
     </head>
     <body>
@@ -104,7 +106,7 @@
             </div>
             <div class="header-item branding span4">
                 <a class="cir-logo" href="http://www.cironline.org" target="_blank">
-                    <img src="http://vbl-staging-media.s3.amazonaws.com/CIRLogoTrans.png" alt="Powered by Center for Investigative Reporting">
+                    <img src="img/CIRLogoTrans.png" alt="Powered by Center for Investigative Reporting">
                 </a>
             </div>
         </div>
@@ -143,7 +145,7 @@
                 };
                 $(chartsContainer).append(ftc(ftcData));
                 var formatTime = d3.time.format("%m/%d/%Y");
-                var commaFormat = d3.format(",1f");
+                var commaFormat = d3.format(",1r");
                 var getAxis = function(container, dim){
                     var yscale = d3.scale.linear()
                         .domain([dim.minY, dim.maxY])
@@ -168,12 +170,14 @@
                             var divId = "line-chart-" + id;
                             var detailsDivId = "details-" +  id++;
                             var shareUrl = 'http://' + document.location.host + '#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
+                            var dataUrl = 'http://vbl-staging-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
                             var templateData = {
                                 'cityName': city.get('name'),
                                 'divId': divId,
                                 'detailsDivId': detailsDivId,
                                 'shareUrl': shareUrl,
-                                'fieldType': fieldType.name
+                                'fieldType': fieldType.name,
+                                'dataUrl': dataUrl
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -184,33 +188,41 @@
                                     'r': 3,
                                 }, 50);
                             });
+                            var lastDot = null;
+                            $("#"+divId).on('mousemove', function(e){
+                                var parentOffset = $(this).parent().offset();
+                                var relX = e.pageX - parentOffset.left;
+                                console.log(e);
+                                var dot = _.find(chart.dots, function(dot){
+                                    if(lastDot !== null){
+                                        if(relX > lastDot.attr().cx && relX <= dot.attr().cx){
+                                            return dot;
+                                        }
+                                    }
+                                    if(lastDot !== null){
+                                        lastDot.animate({
+                                            'stroke-width': '0',
+                                            'stroke': 'black',
+                                        }, 1);
+                                    }
+                                    lastDot = dot;
+                                });
+                                if(dot !== null){
+                                    dot.animate({
+                                        'stroke-width': '4',
+                                        'stroke': 'red',
+                                    }, 1);
+                                    lastDot = dot;
+                                }
+                                var ele = "#" + detailsDivId;
+                                var html = dot.data('obj').getDetailTemplate(formatTime, commaFormat)
+                                $(ele).html(html);
+
+                            });
                             $("#"+divId).on('mouseout', function(e){
                                 chart.dots.animate({
                                     'r': 0
                                 }, 50);
-                            });
-                            var lastSelected = null;
-                            chart.dots.forEach(function(b){
-                                var doAction = function(dot){
-                                    dot.animate({
-                                        'stroke-width': '4',
-                                        'stroke': 'red',
-                                    }, 50);
-                                    var ele = "#" + detailsDivId;
-                                    var html = b.data('obj').getDetailTemplate(formatTime, commaFormat)
-                                    $(ele).html(html);
-
-                                    if(lastSelected !== null){
-                                        lastSelected.animate({
-                                            'stroke-width': '0',
-                                            'stroke': 'black',
-                                        }, 50);
-                                    }
-                                    lastSelected = dot;
-                                };
-                                b.mouseover(function(){
-                                    doAction(this);
-                                });
                             });
                         };
                         //set up query to ask for data type and by city
@@ -230,6 +242,7 @@
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
+                        //'resourceUri': 'http://localhost:8000/api/aspire/'
                         'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/aspire/',
                     },
                     graphOptions: {
@@ -242,6 +255,7 @@
                     }
                 };
                 var cityOptions = {
+                    //'resourceUri': 'http://localhost:8000/api/city/',
                     'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/',
                     'options': {
                         limit: 130
@@ -265,6 +279,7 @@
                         $("#change-field-type").val(fieldType);
                         aspireSettings.fieldTypeOptions.name = fieldType;
                         aspireSettings.fieldTypeOptions.fieldType = fieldType;
+                        aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
                         buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     },
                     displayCityField: function(fieldType, slug){
@@ -305,12 +320,17 @@
                                     style="width:130px; height:20px;"></iframe> 
                        </div>
                         <div class="deep-link">
-                            <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">embed</a>
+                            <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
+                                <img src="img/embed.png" alt="Embed this graph">
+                            </a>
                             <div id="embed-<%= detailsDivId %>" class="embed-box">
                                 <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
                                 Copy this code and paste it into your web page:
                                 <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="400px"></iframe>'>
                             </div>
+                        </div>
+                        <div class="deep-link">
+                            <a href="<%= dataUrl %>">download the data</a>
                         </div>
                     </div>
                     <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details</div>

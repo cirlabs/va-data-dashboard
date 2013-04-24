@@ -41,7 +41,7 @@ var VaDataCollection = Backbone.Collection.extend({
         //jsonp to call from other domains
         var params = _.extend({
             type: 'GET',
-            dataType: 'jsonp',
+            dataType: 'json',
             url: model.url(),
             processData: true
         }, options);
