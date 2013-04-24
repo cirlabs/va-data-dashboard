@@ -17,11 +17,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,700' rel='stylesheet' type='text/css'>
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <style>
             body{
-                font-family: 'Quicksand', sans-serif;
+                font-family: 'Open Sans', sans-serif;
             }
             .line-chart-container{
                 height: 250px;
@@ -64,23 +64,50 @@
                 background-color: white;
                 z-index: 10;
             }
+            .header{
+                width: 100%;
+                background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(img/lghtmesh.png);
+            }
+            .header-item{
+                padding: 5px;
+            }
+            .branding img{
+                height: 50%;
+            }
+            .branding a{
+                position: absolute;
+                right: 15px;
+                top: 10px;
+            }
         </style>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
-        Selected data point:
-        <select id="change-field-type">
-            <option value="pending-claim">Pending Claims</option>
-            <option value="appealed-claims">Appealed Claims</option>
-            <option value="average-processing-time">Average Processing Time</option>
-            <option value="completed-claims">Completed Claims</option>
-            <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
-            <option value="employees-on-duty">Employees On Duty</option>
-            <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
-            <option value="claims-received">Claims Received</option>
-        </select>
+        <div class="header row-fluid">
+            <div class="header-item span4">
+                <h3>VA Data Dashboard</h3>
+            </div>
+            <div class="header-item span4">
+                Selected data point:
+                <select id="change-field-type">
+                    <option value="pending-claim">Pending Claims</option>
+                    <option value="appealed-claims">Appealed Claims</option>
+                    <option value="average-processing-time">Average Processing Time</option>
+                    <option value="completed-claims">Completed Claims</option>
+                    <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
+                    <option value="employees-on-duty">Employees On Duty</option>
+                    <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
+                    <option value="claims-received">Claims Received</option>
+                </select>
+            </div>
+            <div class="header-item branding span4">
+                <a class="cir-logo" href="http://www.cironline.org" target="_blank">
+                    <img src="http://vbl-staging-media.s3.amazonaws.com/CIRLogoTrans.png" alt="Powered by Center for Investigative Reporting">
+                </a>
+            </div>
+        </div>
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
@@ -145,7 +172,8 @@
                                 'cityName': city.get('name'),
                                 'divId': divId,
                                 'detailsDivId': detailsDivId,
-                                'shareUrl': shareUrl
+                                'shareUrl': shareUrl,
+                                'fieldType': fieldType.name
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -285,7 +313,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="<%= detailsDivId %>" class="chart-details">Hover or touch the line for more details</div>
+                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details</div>
                 </div>
                 <div id="<%= divId %>" class="line-chart"></div>
             </div>
