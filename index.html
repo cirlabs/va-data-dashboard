@@ -55,12 +55,22 @@
             .deep-link{
                 display: inline; 
             }
+            .embed-box{
+                display: none;
+                border: 1px solid black;
+                width: 50%;
+                position: absolute;
+                right: 20%;
+                background-color: white;
+                z-index: 10;
+            }
         </style>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
+        Selected data point:
         <select id="change-field-type">
             <option value="pending-claim">Pending Claims</option>
             <option value="appealed-claims">Appealed Claims</option>
@@ -130,10 +140,12 @@
                         var drawCharts = function(){
                             var divId = "line-chart-" + id;
                             var detailsDivId = "details-" +  id++;
+                            var shareUrl = 'http://' + document.location.host + '#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
                             var templateData = {
                                 'cityName': city.get('name'),
                                 'divId': divId,
-                                'detailsDivId': detailsDivId
+                                'detailsDivId': detailsDivId,
+                                'shareUrl': shareUrl
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -198,8 +210,7 @@
                         strokeColor: 'white',
                         fillOpacity: .05,
                         radius: 0,
-                        bottom: 50,
-                        left: 50
+                        bottom: 50
                     }
                 };
                 var cityOptions = {
@@ -241,6 +252,7 @@
                     var title = $(element).find('option:selected').text()
                     aspireSettings.fieldTypeOptions.name = title;
                     aspireSettings.fieldTypeOptions.fieldType = val;
+                    aspireSettings.graphOptions.left = val === 'appealed-claims' ? 50 : 0;
                     buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     return false;
                 });
@@ -249,7 +261,7 @@
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            var _gaq=[['_setAccount','UA-37583724-1'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
@@ -259,18 +271,18 @@
                 <div class="details-container">
                     <h1><%= cityName %></h1>
                     <div class="share">
-                        <!--
                         <div class="twitter">
                             <iframe allowtransparency="true" frameborder="0" scrolling="no"
-                                    src="https://platform.twitter.com/widgets/tweet_button.html"
+                                    src="https://platform.twitter.com/widgets/tweet_button.html?url=<%= shareUrl %>&text=Explore data about the veterans backlog near you at <%= shareUrl %>&via=cironline"
                                     style="width:130px; height:20px;"></iframe> 
                        </div>
-                        <div class="facebook">
-                            <div class="fb-like" data-href="http://localhost:8000" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" data-font="lucida grande" data-action="recommend"></div>
-                        </div>
-                        -->
                         <div class="deep-link">
-                            <a href="#">mylink</a>
+                            <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">embed</a>
+                            <div id="embed-<%= detailsDivId %>" class="embed-box">
+                                <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
+                                Copy this code and paste it into your web page:
+                                <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="400px"></iframe>'>
+                            </div>
                         </div>
                     </div>
                     <div id="<%= detailsDivId %>" class="chart-details">Hover or touch the line for more details</div>
@@ -279,11 +291,7 @@
             </div>
         </script>
         <script type="text/template" id="field-type-container">
-            <div class="span2">
-                <h1 id="field-type-declaration"><%= fieldType %></h1>
-            </div>
-            <div id="put-chartz-here" class="span10">
-            </div>
+            <div id="put-chartz-here"></div>
         </script>
     </body>
 </html>
