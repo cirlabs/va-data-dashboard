@@ -76,7 +76,7 @@
             }
             .share{
             }
-            .deep-link{
+            .share-item{
                 display: inline;
 
             }
@@ -101,6 +101,7 @@
                     <option value="employees-on-duty">Employees On Duty</option>
                     <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
                     <option value="claims-received">Claims Received</option>
+                    <option value="claims-received-average-wait">Average Wait for New Claims</option>
                 </select>
             </div>
             <div class="header-item branding span4">
@@ -215,7 +216,6 @@
                                 var ele = "#" + detailsDivId;
                                 var html = dot.data('obj').getDetailTemplate(formatTime, commaFormat)
                                 $(ele).html(html);
-
                             });
                             $("#"+divId).on('mouseout', function(e){
                                 chart.dots.animate({
@@ -316,7 +316,7 @@
                             <a href="https://twitter.com/share">
                                 <i class="icon-twitter icon-28x"></i> tweet
                             </a>
-                       </div>
+                        </div>
                         <div class="share-item">
                             <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
                                 <i class="icon-share icon-28x"></i> embed this graph
