@@ -55,6 +55,32 @@ var VaDataCollection = Backbone.Collection.extend({
         return this.resourceUri;
     }
 });
+var parseCSV = function(response){
+    var lines = response.split('\n');
+    var keys = lines[0].split(",");
+    var content = lines.slice(1);
+    var objects = _.map(content, function(obj){
+        var object = {};
+        obj = obj.replace("\"", "");
+        var lineItems = obj.split(",");
+        _.each(keys, function(key, idx, list){
+            object[key] = lineItems[idx];
+        });
+        return obj === "" ? null : object;
+    });
+    var retval =  _.filter(objects, function(obj){
+        return (obj !== null) === true;
+    });
+    return retval;
+};
+var sync = function(method, model, options, url){
+    var me = this;
+    var params = _.extend({
+        type: 'GET',
+        url: url
+    }, options);
+    return $.ajax(params);
+};
 var VaCSVDataCollection = Backbone.Collection.extend({
     model: VaData,
     initialize: function(models, options){
@@ -62,19 +88,13 @@ var VaCSVDataCollection = Backbone.Collection.extend({
         this.citySlug = options.citySlug;
     },
     sync: function(method, model, options) {
-        //jsonp to call from other domains
-        var me = this;
-        d3.csv(me.url(), function(error, data){
-            me.payload = data;
-            me.parse(data);
-        });
-        return 0;
+        return sync(method, model, options, this.url());
     },
     parse: function(response) {
-        return response.objects;
+        return parseCSV(response);
     },
     url: function(){
-        return "http://vbl-staging-media.s3.amazonaws.com/data/" + this.citySlug + "/" + this.fieldTypeSlug + ".csv";
+        return "http://vbl-staging-media.s3.amazonaws.com/data/" + this.citySlug + "-" + this.fieldTypeSlug + ".csv";
     }
 });
 var VaCSVCitiesCollection = Backbone.Collection.extend({
@@ -82,16 +102,10 @@ var VaCSVCitiesCollection = Backbone.Collection.extend({
     initialize: function(models, options){
     },
     sync: function(method, model, options) {
-        //jsonp to call from other domains
-        var me = this;
-        d3.csv(me.url(), function(error, data){
-            me.payload = data;
-            me.parse(data);
-        });
-        return 0;
+        return sync(method, model, options, this.url());
     },
     parse: function(response) {
-        return response.objects;
+        return parseCSV(response);
     },
     url: function(){
         return "http://vbl-staging-media.s3.amazonaws.com/data/cities.csv";
