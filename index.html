@@ -135,6 +135,8 @@
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="http://platform.twitter.com/widgets.js"></script>
         <script>
+            //save a few queries every change
+            var cities = null;
             var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions){
                 window.stop();//cancel any unfinished requests
                 var lct = _.template($("#line-chart-template").html());
@@ -159,7 +161,7 @@
                     cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
                     var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
                 };
-                var cities = new VaDataCollection([], cityOptions);
+                cities = cities === null ? new VaDataCollection([], cityOptions) : cities;
                 var foundCitiesCb = function(){
                     var itemsContainer = $("#put-chartz-here");
                     var id = 0;
@@ -233,7 +235,11 @@
                     });
                 };
                 //get all the cities
-                cities.fetch({success: foundCitiesCb, data:cityOptions.options});
+                if(cities.models.length <= 0){
+                    cities.fetch({success: foundCitiesCb, data:cityOptions.options});
+                }else{
+                    foundCitiesCb();
+                }
             };
             $(document).ready(function(){
                 var aspireSettings = {

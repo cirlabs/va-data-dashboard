@@ -10,6 +10,7 @@ VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims 
 VaDashboard.templates.details['employees-on-duty'] = '<%= value %> employees on duty as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-one-year'] = '<%= value %> claims are pending at least one year as of <%= date %>';
 VaDashboard.templates.details['claims-received'] = '<%= value %> claims were completed as of <%= date %>';
+VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing new claims wait an average of <%= value %> days as of <%= date %>';
 
 var VaData = Backbone.Model.extend({
     initialize: function(attributes){
@@ -52,5 +53,47 @@ var VaDataCollection = Backbone.Collection.extend({
     },
     url: function(){
         return this.resourceUri;
+    }
+});
+var VaCSVDataCollection = Backbone.Collection.extend({
+    model: VaData,
+    initialize: function(models, options){
+        this.fieldTypeSlug = options.fieldTypeSlug;
+        this.citySlug = options.citySlug;
+    },
+    sync: function(method, model, options) {
+        //jsonp to call from other domains
+        var me = this;
+        d3.csv(me.url(), function(error, data){
+            me.payload = data;
+            me.parse(data);
+        });
+        return 0;
+    },
+    parse: function(response) {
+        return response.objects;
+    },
+    url: function(){
+        return "http://vbl-staging-media.s3.amazonaws.com/data/" + this.citySlug + "/" + this.fieldTypeSlug + ".csv";
+    }
+});
+var VaCSVCitiesCollection = Backbone.Collection.extend({
+    model: VaData,
+    initialize: function(models, options){
+    },
+    sync: function(method, model, options) {
+        //jsonp to call from other domains
+        var me = this;
+        d3.csv(me.url(), function(error, data){
+            me.payload = data;
+            me.parse(data);
+        });
+        return 0;
+    },
+    parse: function(response) {
+        return response.objects;
+    },
+    url: function(){
+        return "http://vbl-staging-media.s3.amazonaws.com/data/cities.csv";
     }
 });
