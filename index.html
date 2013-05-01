@@ -165,7 +165,13 @@
                 var foundCitiesCb = function(){
                     var itemsContainer = $("#put-chartz-here");
                     var id = 0;
-                    _.each(cities.models, function(city){
+                    var models = cities.models;
+                    if(cityOptions.options.slug !== undefined){
+                        models = _.filter(cities.models, function(city){
+                            return city.get("slug") === cityOptions.options.slug;
+                        });
+                    }
+                    _.each(models, function(city){
                         var vaDataCollection = new VaDataCollection([], fieldType);
                         //using closures to simplify code
                         var drawCharts = function(){
@@ -246,8 +252,7 @@
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
-                        //'resourceUri': 'http://localhost:8000/api/aspire/'
-                        'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/aspire/',
+                        'resourceUri': 'http://vetsapi.herokuapp.com/api/aspire/',
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
@@ -259,8 +264,7 @@
                     }
                 };
                 var cityOptions = {
-                    //'resourceUri': 'http://localhost:8000/api/city/',
-                    'resourceUri': 'http://glowing-sunset-5928.herokuapp.com/api/city/',
+                    'resourceUri': 'http://vetsapi.herokuapp.com/api/city/',
                     'options': {
                         limit: 130
                     }
@@ -273,22 +277,29 @@
                         "field-type/:fieldType/city/:slug": "displayCityField"
                     },
                     home: function(){
+                        cityOptions.options = {limit: 130};
                         buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     },
                     cityDisplay: function(slug){
-                        cityOptions.options = {'slug': slug};
-                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);                        
+                        cityOptions.options = {'slug': slug, limit: 130};
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);             
                     },
                     displayField: function(fieldType){
                         $("#change-field-type").val(fieldType);
                         aspireSettings.fieldTypeOptions.name = fieldType;
                         aspireSettings.fieldTypeOptions.fieldType = fieldType;
                         aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
+                        cityOptions.options = {limit: 130};
                         buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     },
                     displayCityField: function(fieldType, slug){
-                        cityOptions.options = {'slug': slug};
-                        this.displayField(fieldType);
+                        cityOptions.options = {'slug': slug, limit: 130};
+                        //this.displayField(fieldType);
+                        $("#change-field-type").val(fieldType);
+                        aspireSettings.fieldTypeOptions.name = fieldType;
+                        aspireSettings.fieldTypeOptions.fieldType = fieldType;
+                        aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
                     }
                 });
                 var workspace = new Workspace();
@@ -330,7 +341,7 @@
                             <div id="embed-<%= detailsDivId %>" class="embed-box">
                                 <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
                                 Copy this code and paste it into your web page:
-                                <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="400px"></iframe>'>
+                                <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="500px"></iframe>'>
                             </div>
                         </div>
                         <div class="share-item">
