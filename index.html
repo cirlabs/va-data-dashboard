@@ -169,8 +169,9 @@
         <script>
             //save a few queries every change
             var cities = null;
-            var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions){
+            var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions, useCSV){
                 window.stop();//cancel any unfinished requests
+                var doCsv = useCSV !== undefined ? useCSV : false;
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
                 $(chartsContainer).empty();
@@ -193,7 +194,7 @@
                     cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
                     var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
                 };
-                cities = cities === null ? new VaDataCollection([], cityOptions) : cities;
+                cities = cities === null ? (doCsv ? new VaCSVCitiesCollection([],{}) : new VaDataCollection([], cityOptions)) : cities;
                 var foundCitiesCb = function(){
                     var itemsContainer = $("#put-chartz-here");
                     var id = 0;
@@ -207,7 +208,10 @@
                         return obj.get("slug");
                     });
                     _.each(models, function(city){
-                        var vaDataCollection = new VaDataCollection([], fieldType);
+                        var vaDataCollection = !doCsv ? new VaDataCollection([], fieldType) : new VaCSVDataCollection([], {
+                            fieldTypeSlug: fieldType.fieldType,
+                            citySlug: city.get("slug")
+                        });
                         //using closures to simplify code
                         var drawCharts = function(){
                             var divId = "line-chart-" + id;
@@ -250,13 +254,13 @@
                                     }
                                     lastDot = dot;
                                 });
-                                if(dot !== null){
-                                    dot.animate({
-                                        'stroke-width': '4',
-                                        'stroke': 'red',
-                                    }, 1);
-                                    lastDot = dot;
-                                }
+                                if(dot === null || dot === undefined)
+                                    dot = chart.dots[0];
+                                dot.animate({
+                                    'stroke-width': '4',
+                                    'stroke': 'red',
+                                }, 1);
+                                lastDot = dot;
                                 var ele = "#" + detailsDivId;
                                 var html = dot.data('obj').getDetailTemplate(formatTime, commaFormat)
                                 $(ele).html(html);
@@ -284,6 +288,7 @@
                 }
             };
             $(document).ready(function(){
+                var csv = false;//toggle data source
                 $("#about-btn").unbind('click').bind('click', function(e){
                     $("#about").show();
                     return false;
@@ -299,7 +304,7 @@
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
-                        value: function(entry){return entry.get('value');},
+                        value: function(entry){return parseFloat(entry.get('value'));},
                         strokeColor: 'white',
                         fillOpacity: .05,
                         radius: 0,
@@ -321,11 +326,11 @@
                     },
                     home: function(){
                         cityOptions.options = {limit: 130};
-                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
                     },
                     cityDisplay: function(slug){
                         cityOptions.options = {'slug': slug, limit: 130};
-                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);             
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);             
                     },
                     displayField: function(fieldType){
                         $("#change-field-type").val(fieldType);
@@ -333,7 +338,7 @@
                         aspireSettings.fieldTypeOptions.fieldType = fieldType;
                         aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
                         cityOptions.options = {limit: 130};
-                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
                     },
                     displayCityField: function(fieldType, slug){
                         cityOptions.options = {'slug': slug, limit: 130};
@@ -342,7 +347,7 @@
                         aspireSettings.fieldTypeOptions.name = fieldType;
                         aspireSettings.fieldTypeOptions.fieldType = fieldType;
                         aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
-                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
                     }
                 });
                 var workspace = new Workspace();
@@ -361,7 +366,7 @@
                     aspireSettings.fieldTypeOptions.name = title;
                     aspireSettings.fieldTypeOptions.fieldType = val;
                     aspireSettings.graphOptions.left = val === 'appealed-claims' ? 50 : 0;
-                    buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions);
+                    buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
                     return false;
                 });
             }); 
