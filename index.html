@@ -100,6 +100,10 @@
                     <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
                     <option value="employees-on-duty">Employees On Duty</option>
                     <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
+                    <option value="claims-pending-at-least-two-years">Claims Pending >= Two Years</option>
+                    <option value="claims-pending-at-least-two-years">Claims Pending >= Three Years</option>
+                    <option value="claims-pending-at-least-two-years">Claims Pending >= Four Years</option>
+                    <option value="claims-pending-at-least-two-years">Claims Pending >= Five Years</option>
                     <option value="claims-received">Claims Received</option>
                     <option value="claims-received-average-wait">Average Wait for New Claims</option>
                 </select>
@@ -110,14 +114,6 @@
                 </a>
             </div>
         </div>
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=132206816830554";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
         <div class="container-fluid">
             <div id="put-stuff-here" class="row-fluid">
             </div>
@@ -133,7 +129,6 @@
         <script src="js/chartz.js"></script>
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
-        <script src="http://platform.twitter.com/widgets.js"></script>
         <script>
             //save a few queries every change
             var cities = null;
@@ -177,7 +172,7 @@
                         var drawCharts = function(){
                             var divId = "line-chart-" + id;
                             var detailsDivId = "details-" +  id++;
-                            var shareUrl = 'http://' + document.location.host + '#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
+                            var shareUrl = 'http://citizen-media.s3.amazonaws.com/interactive/vets-dashboard/csv-loader.html#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
                             var dataUrl = 'http://vbl-staging-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
                             var templateData = {
                                 'cityName': city.get('name'),
@@ -185,7 +180,8 @@
                                 'detailsDivId': detailsDivId,
                                 'shareUrl': shareUrl,
                                 'fieldType': fieldType.name,
-                                'dataUrl': dataUrl
+                                'dataUrl': dataUrl,
+                                'encShareUrl': encodeURIComponent(shareUrl)
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -330,7 +326,7 @@
                     <h1><%= cityName %></h1>
                     <div class="share">
                         <div class="share-item">
-                            <a href="https://twitter.com/share">
+                            <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= shareUrl %>" target="_blank">
                                 <i class="icon-twitter icon-28x"></i> tweet
                             </a>
                         </div>

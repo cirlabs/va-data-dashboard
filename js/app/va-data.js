@@ -9,6 +9,10 @@ VaDashboard.templates.details['completed-claims'] = '<%= value %> claims were co
 VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims processors complete <%= value %> claims as of <%= date %>';
 VaDashboard.templates.details['employees-on-duty'] = '<%= value %> employees on duty as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-one-year'] = '<%= value %> claims are pending at least one year as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-two-years'] = '<%= value %> claims are pending at least two years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-three-years'] = '<%= value %> claims are pending at least three years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-four-years'] = '<%= value %> claims are pending at least four years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-five-years'] = '<%= value %> claims are pending at least five years as of <%= date %>';
 VaDashboard.templates.details['claims-received'] = '<%= value %> claims were completed as of <%= date %>';
 VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing new claims wait an average of <%= value %> days as of <%= date %>';
 
