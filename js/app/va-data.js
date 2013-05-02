@@ -20,7 +20,6 @@ var VaData = Backbone.Model.extend({
     initialize: function(attributes){
         this.attributes = attributes;
         //if you wanna do something when a data point is found
-        //listen to this event
         VaDashboard.events.trigger('dataPointCreated', {model: this});
     },
     url: function(){
@@ -41,16 +40,6 @@ var VaDataCollection = Backbone.Collection.extend({
     initialize: function(models, options){
         this.fieldType = options.fieldType;
         this.resourceUri = options.resourceUri;
-    },
-    sync: function(method, model, options) {
-        //jsonp to call from other domains
-        var params = _.extend({
-            type: 'GET',
-            dataType: 'json',
-            url: model.url(),
-            processData: true
-        }, options);
-        return $.ajax(params);
     },
     parse: function(response) {
         return response.objects;
