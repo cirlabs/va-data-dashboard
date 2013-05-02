@@ -80,23 +80,54 @@
                 display: inline;
 
             }
+            #about{
+                display: none;
+                background-color: white;
+                padding: 10px;
+                width: 85%;
+            }
+            .about-info{
+            }
+            #close-about-btn{
+                font-size: 120%;
+                font-weight:900;
+            }
         </style>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
+        <div id="about" class="row-fluid">
+            <a href="#" id="close-about-btn">X</a>
+            <div class="about-info span12">
+                The API reports the following fields:
+                <ul>
+                    <li>Pending claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military.</li>
+                    <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
+                    <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
+                    <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
+                    <li>Completed claims: The number of claims processed by the VA by month.</li>
+                    <li>Claims received: The number of claims received by the VA by month.</li>
+                    <li>Claims completed per FTE: The number of claims processed per VA claims employee over the course of a year.</li>
+                    <li>Employees on duty: Number of claims staff working at the Veterans Service Center at each VA regional office.</li>
+                    <li>Claims pending >= one/two/three/four/five years: The number of unprocessed claims at least a year old, including appeals.</li>
+                </ul>
+            </div>
+        </div>
         <div class="header row-fluid">
             <div class="header-item span4">
-                <h3>VA Data Dashboard</h3>
+                <h3>VA Data Dashboard<a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a></h3>
             </div>
             <div class="header-item span4">
                 Selected data point:
                 <select id="change-field-type">
                     <option value="pending-claim">Pending Claims</option>
-                    <option value="appealed-claims">Appealed Claims</option>
                     <option value="average-processing-time">Average Processing Time</option>
+                    <option value="claims-received-average-wait">Average Wait for New Claims</option>
+                    <option value="appealed-claims">Average Time to Decide an Appeal</option>
                     <option value="completed-claims">Completed Claims</option>
+                    <option value="claims-received">Claims Received</option>
                     <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
                     <option value="employees-on-duty">Employees On Duty</option>
                     <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
@@ -104,8 +135,6 @@
                     <option value="claims-pending-at-least-two-years">Claims Pending >= Three Years</option>
                     <option value="claims-pending-at-least-two-years">Claims Pending >= Four Years</option>
                     <option value="claims-pending-at-least-two-years">Claims Pending >= Five Years</option>
-                    <option value="claims-received">Claims Received</option>
-                    <option value="claims-received-average-wait">Average Wait for New Claims</option>
                 </select>
             </div>
             <div class="header-item branding span4">
@@ -239,6 +268,13 @@
                 cities.fetch({success: foundCitiesCb, data:{}});
             };
             $(document).ready(function(){
+                $("#about-btn").unbind('click').bind('click', function(e){
+                    $("#about").show();
+                    return false;
+                });
+                $("#close-about-btn").unbind('click').bind('click', function(e){
+                    $("#about").hide();
+                });
                 var aspireSettings = {
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
