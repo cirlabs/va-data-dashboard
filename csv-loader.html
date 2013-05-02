@@ -201,6 +201,9 @@
                             return city.get("slug") === cityOptions.options.slug;
                         });
                     }
+                    models = _.sortBy(models, function(obj){
+                        return obj.get("slug");
+                    });
                     _.each(models, function(city){
                         var vaDataCollection = new VaCSVDataCollection([], {
                             fieldTypeSlug: fieldType.fieldType,

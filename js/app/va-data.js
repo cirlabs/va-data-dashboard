@@ -2,19 +2,19 @@ try{VaDashboard = VaDashboard;}catch(err){VaDashboard = {};}
 VaDashboard.events = VaDashboard.events !== undefined ? VaDashboard.events : _.extend({}, Backbone.Events);
 VaDashboard.templates = VaDashboard.templates !== undefined ? VaDashboard.templates : {};
 VaDashboard.templates.details = {};
-VaDashboard.templates.details['pending-claim'] = '<%= value %> claims pending on <%= date %>';
-VaDashboard.templates.details['appealed-claims'] = 'Veterans who file an appeal to their claim wait <%= value %> days on average as of <%= date %>';
+VaDashboard.templates.details['pending-claim'] = '<%= value %> veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military on <%= date %>';
+VaDashboard.templates.details['appealed-claims'] = 'Veterans who file an appeal to their claim wait <%= value %> days on average for a response from the VA if they were denied their original claim and had to appeal as of <%= date %>';
 VaDashboard.templates.details['average-processing-time'] = 'Veterans wait <%= value %> days on average as of <%= date %> for a response to their disability claim';
-VaDashboard.templates.details['completed-claims'] = '<%= value %> claims were completed as of <%= date %>';
-VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims processors complete <%= value %> claims as of <%= date %>';
-VaDashboard.templates.details['employees-on-duty'] = '<%= value %> employees on duty as of <%= date %>';
-VaDashboard.templates.details['claims-pending-at-least-one-year'] = '<%= value %> claims are pending at least one year as of <%= date %>';
-VaDashboard.templates.details['claims-pending-at-least-two-years'] = '<%= value %> claims are pending at least two years as of <%= date %>';
-VaDashboard.templates.details['claims-pending-at-least-three-years'] = '<%= value %> claims are pending at least three years as of <%= date %>';
-VaDashboard.templates.details['claims-pending-at-least-four-years'] = '<%= value %> claims are pending at least four years as of <%= date %>';
-VaDashboard.templates.details['claims-pending-at-least-five-years'] = '<%= value %> claims are pending at least five years as of <%= date %>';
-VaDashboard.templates.details['claims-received'] = '<%= value %> claims were completed as of <%= date %>';
-VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing new claims wait an average of <%= value %> days as of <%= date %>';
+VaDashboard.templates.details['completed-claims'] = '<%= value %> claims processed per month as of <%= date %>';
+VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims processors complete <%= value %> claims per year as of <%= date %>';
+VaDashboard.templates.details['employees-on-duty'] = '<%= value %> claims staff working the Veterans Service Center as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-one-year'] = '<%= value %> unprocessed claims at least one year as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-two-years'] = '<%= value %> unprocessed claims at least two years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-three-years'] = '<%= value %> unprocessed claims at least three years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-four-years'] = '<%= value %> unprocessed claims at least four years as of <%= date %>';
+VaDashboard.templates.details['claims-pending-at-least-five-years'] = '<%= value %> unprocessed claims at least five years as of <%= date %>';
+VaDashboard.templates.details['claims-received'] = '<%= value %> claims received by the VA by month as of <%= date %>';
+VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing a claim for the first time wait an average of <%= value %> days as of <%= date %>';
 
 var VaData = Backbone.Model.extend({
     initialize: function(attributes){
