@@ -65,6 +65,10 @@
             }
             .header-item{
                 padding: 5px;
+                text-align: center;
+            }
+            .header-item p{
+                margin-top: -10px;
             }
             .branding img{
                 height: 50%;
@@ -91,6 +95,9 @@
             #close-about-btn{
                 font-size: 120%;
                 font-weight:900;
+            }
+            .src-info{
+                font-size: 75%;
             }
         </style>
     </head>
@@ -136,6 +143,7 @@
                     <option value="claims-pending-at-least-two-years">Claims Pending >= Four Years</option>
                     <option value="claims-pending-at-least-two-years">Claims Pending >= Five Years</option>
                 </select>
+                <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Report</span></p>
             </div>
             <div class="header-item branding span4">
                 <a class="cir-logo" href="http://www.cironline.org" target="_blank">
@@ -334,7 +342,14 @@
                 $("#change-field-type").on("change", function(){
                     var element = $(this);
                     var val = $(element).val();
-                    var title = $(element).find('option:selected').text()
+                    var title = $(element).find('option:selected').text();
+                    var srcText = "Department of Veterans Affairs Monday Morning Report";
+                    if(val === 'average-processing-time'){
+                        srcText = "Department of Veterans Affairs Aspire Dashboard";
+                    }else{
+                        srcText = "Internal VA documents obtained by CIR"
+                    }
+                    $("#src-lbl").html(srcText);
                     aspireSettings.fieldTypeOptions.name = title;
                     aspireSettings.fieldTypeOptions.fieldType = val;
                     aspireSettings.graphOptions.left = val === 'appealed-claims' ? 50 : 0;
