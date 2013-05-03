@@ -88,7 +88,8 @@
                 display: none;
                 background-color: white;
                 padding: 10px;
-                width: 85%;
+                width: 100%;
+                background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(img/lghtmesh.png);
             }
             .about-info{
             }
@@ -236,6 +237,11 @@
                                     'r': 3,
                                 }, 50);
                             });
+                            $("#"+divId).on('mouseout', function(e){
+                                var ele = "#" + detailsDivId;
+                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details";
+                                $(ele).html(str);
+                            });
                             var lastDot = null;
                             $("#"+divId).on('mousemove', function(e){
                                 var parentOffset = $(this).parent().offset();
@@ -288,19 +294,20 @@
                 }
             };
             $(document).ready(function(){
-                var csv = false;//toggle data source
+                var csv = true;//toggle data source
                 $("#about-btn").unbind('click').bind('click', function(e){
                     $("#about").show();
                     return false;
                 });
                 $("#close-about-btn").unbind('click').bind('click', function(e){
                     $("#about").hide();
+                    return false;
                 });
                 var aspireSettings = {
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
-                        'resourceUri': 'http://vetsapi.herokuapp.com/api/aspire/',
+                        'resourceUri': 'http://vetsapi.herokuapp.com/api/aspire/'
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
