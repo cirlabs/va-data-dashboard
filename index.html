@@ -155,7 +155,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Reports</span>
+            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Workload Reports</span>
             <a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a>
             </p>
             <div id="put-stuff-here" class="row-fluid">
@@ -368,9 +368,9 @@
                     var element = $(this);
                     var val = $(element).val();
                     var title = $(element).find('option:selected').text();
-                    var srcText = "Department of Veterans Affairs Monday Morning Reports";
+                    var srcText = "Department of Veterans Affairs Monday Morning Workload Reports";
                     if(val === 'average-processing-time'){
-                        srcText = "Department of Veterans Affairs ASPIRE Dashboard and internal VA documents obtained by CIR";
+                        srcText = "Department of Veterans Affairs ASPIRE dashboard and internal VA documents obtained by CIR";
                     }else if(val !== 'claims-pending-125-days'){
                         srcText = "Internal VA documents obtained by CIR"
                     }
