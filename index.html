@@ -117,10 +117,10 @@
             <div class="about-info span12">
                 The API reports the following fields:
                 <ul>
-                    <li>Veterans Waiting on a Disability Claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
+                    <li>Veterans waiting on a disability claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
                     <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
                     <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
-                    <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
+                    <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if he or she was denied the original claim and had to appeal.</li>
                     <li>Completed claims: The number of claims processed by the VA by month.</li>
                     <li>Claims received: The number of claims received by the VA by month.</li>
                     <li>Claims completed per FTE: The number of claims processed per VA claims employee over the course of a year.</li>
@@ -136,26 +136,26 @@
             <div class="header-item span4">
                 Selected data point:
                 <select id="change-field-type">
-                    <option value="pending-claim">Veterans Waiting on a Disability Claim</option>
-                    <option value="average-processing-time">Average Processing Time</option>
-                    <option value="claims-received-average-wait">Average Wait for New Claims</option>
-                    <option value="appealed-claims">Average Time to Decide an Appeal</option>
-                    <option value="completed-claims">Completed Claims</option>
-                    <option value="claims-received">Claims Received</option>
-                    <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
-                    <option value="employees-on-duty">Employees On Duty</option>
-                    <option value="claims-pending-125-days">Claims Pending >= 125 days</option>
-                    <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
+                    <option value="pending-claim">Veterans waiting on a disability claim</option>
+                    <option value="average-processing-time">Average processing time</option>
+                    <option value="claims-received-average-wait">Average wait for new claims</option>
+                    <option value="appealed-claims">Average time to decide an appeal</option>
+                    <option value="completed-claims">Completed claims</option>
+                    <option value="claims-received">Claims received</option>
+                    <option value="claims-completed-per-fte">Claims completed per FTE</option>
+                    <option value="employees-on-duty">Employees on duty</option>
+                    <option value="claims-pending-125-days">Claims pending >= 125 days</option>
+                    <option value="claims-pending-at-least-one-year">Claims pending >= one year</option>
                 </select>
             </div>
             <div class="header-item branding span4">
                 <a class="cir-logo" href="http://www.cironline.org" target="_blank">
-                    <img src="img/CIRLogoTrans.png" alt="Powered by Center for Investigative Reporting">
+                    <img src="img/CIRLogoTrans.png" alt="Powered by The Center for Investigative Reporting">
                 </a>
             </div>
         </div>
         <div class="container-fluid">
-            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Report</span>
+            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Workload Reports</span>
             <a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a>
             </p>
             <div id="put-stuff-here" class="row-fluid">
@@ -244,7 +244,7 @@
                             });
                             $("#"+divId).on('mouseout', function(e){
                                 var ele = "#" + detailsDivId;
-                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details";
+                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details.";
                                 $(ele).html(str);
                             });
                             var lastDot = null;
@@ -368,9 +368,9 @@
                     var element = $(this);
                     var val = $(element).val();
                     var title = $(element).find('option:selected').text();
-                    var srcText = "Department of Veterans Affairs Monday Morning Report";
+                    var srcText = "Department of Veterans Affairs Monday Morning Workload Reports";
                     if(val === 'average-processing-time'){
-                        srcText = "Department of Veterans Affairs Aspire Dashboard and internal VA documents obtained by CIR";
+                        srcText = "Department of Veterans Affairs ASPIRE dashboard and internal VA documents obtained by CIR";
                     }else if(val !== 'claims-pending-125-days'){
                         srcText = "Internal VA documents obtained by CIR"
                     }
@@ -398,25 +398,25 @@
                     <div class="share">
                         <div class="share-item">
                             <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= shareUrl %>" target="_blank">
-                                <i class="icon-twitter icon-28x"></i> tweet
+                                <i class="icon-twitter icon-28x"></i> Tweet
                             </a>
                         </div>
                         <div class="share-item">
                             <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
-                                <i class="icon-share icon-28x"></i> embed this 
+                                <i class="icon-share icon-28x"></i> Embed this 
                             </a>
                             <div id="embed-<%= detailsDivId %>" class="embed-box">
                                 <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
-                                Copy this code and paste it into your web page:
+                                Copy this code and paste it into your Web page:
                                 <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="500px"></iframe>'>
                             </div>
                         </div>
                         <div class="share-item">
-                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> download data
+                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> Download data
                             </a>
                         </div>
                     </div>
-                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details</div>
+                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details.</div>
                 </div>
                 <div id="<%= divId %>" class="line-chart"></div>
             </div>

@@ -7,13 +7,13 @@ VaDashboard.templates.details['appealed-claims'] = 'Veterans who file an appeal 
 VaDashboard.templates.details['average-processing-time'] = 'Veterans wait <%= value %> days on average as of <%= date %> for a response to their disability claim';
 VaDashboard.templates.details['completed-claims'] = '<%= value %> claims processed per month as of <%= date %>';
 VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims processors complete <%= value %> claims per year as of <%= date %>';
-VaDashboard.templates.details['employees-on-duty'] = '<%= value %> claims staff working the Veterans Service Center as of <%= date %>';
+VaDashboard.templates.details['employees-on-duty'] = '<%= value %> claims staff working the veterans service center as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-one-year'] = '<%= value %> unprocessed claims at least one year old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-two-years'] = '<%= value %> unprocessed claims at least two years old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-three-years'] = '<%= value %> unprocessed claims at least three years old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-four-years'] = '<%= value %> unprocessed claims at least four years old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-five-years'] = '<%= value %> unprocessed claims at least five years old as of <%= date %>';
-VaDashboard.templates.details['claims-received'] = '<%= value %> claims received by the VA by month as of <%= date %>';
+VaDashboard.templates.details['claims-received'] = '<%= value %> claims received by the VA per month as of <%= date %>';
 VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing a claim for the first time wait an average of <%= value %> days as of <%= date %>';
 VaDashboard.templates.details['claims-pending-125-days'] = '<%= value %> unprocessed claims at least 125 days old as of <%= date %>';
 
