@@ -149,7 +149,7 @@ We've created two special Backbone.js classes to help you query and parse CSV da
 Fields accessible via publicly accessible web sites are updated weekly and monthly. The VA does not always publish data updates when they are expected so these intervals cannot be guaranteed.
 * Pending claims: updates weekly
 * Claims older than 125 days: updates weekly
-* Average processing time: updates weekly
+* Average processing time: updates monthly 
 
 All other fields were obtained through Freedom of Information Act requests or through internal documents turned over to CIR and verified by the VA. Updates will be published as we receive and validate them.
 
