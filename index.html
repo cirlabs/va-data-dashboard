@@ -46,9 +46,13 @@
             }
             .chart-details{
                 text-align: center;
+                color: #9B9B9B;
             }
             .details-container{
                 height: 100px;
+            }
+            .details-container h3{
+                margin-bottom: -5px;
             }
             .embed-box{
                 display: none;
@@ -82,7 +86,7 @@
             }
             .share-item{
                 display: inline;
-
+                padding-right: 5px;
             }
             #about{
                 display: none;
@@ -92,13 +96,15 @@
                 background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(img/lghtmesh.png);
             }
             .about-info{
+                width: 80%;
             }
             #close-about-btn{
                 font-size: 120%;
                 font-weight:900;
             }
             .src-info{
-                font-size: 75%;
+                font-size: 100%;
+                text-align: center;
             }
         </style>
     </head>
@@ -111,7 +117,7 @@
             <div class="about-info span12">
                 The API reports the following fields:
                 <ul>
-                    <li>Pending claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military.</li>
+                    <li>Veterans Waiting on a Disability Claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
                     <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
                     <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
                     <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
@@ -119,18 +125,18 @@
                     <li>Claims received: The number of claims received by the VA by month.</li>
                     <li>Claims completed per FTE: The number of claims processed per VA claims employee over the course of a year.</li>
                     <li>Employees on duty: Number of claims staff working at the Veterans Service Center at each VA regional office.</li>
-                    <li>Claims pending >= one/two/three/four/five years: The number of unprocessed claims at least a year old, including appeals.</li>
+                    <li>Claims pending >= one year: The number of unprocessed claims at least a year old, including appeals.</li>
                 </ul>
             </div>
         </div>
         <div class="header row-fluid">
             <div class="header-item span4">
-                <h3>VA Data Dashboard<a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a></h3>
+                <h3>VA Data Dashboard</h3>
             </div>
             <div class="header-item span4">
                 Selected data point:
                 <select id="change-field-type">
-                    <option value="pending-claim">Pending Claims</option>
+                    <option value="pending-claim">Veterans Waiting on a Disability Claim</option>
                     <option value="average-processing-time">Average Processing Time</option>
                     <option value="claims-received-average-wait">Average Wait for New Claims</option>
                     <option value="appealed-claims">Average Time to Decide an Appeal</option>
@@ -138,13 +144,9 @@
                     <option value="claims-received">Claims Received</option>
                     <option value="claims-completed-per-fte">Claims Completed Per FTE</option>
                     <option value="employees-on-duty">Employees On Duty</option>
+                    <option value="claims-pending-125-days">Claims Pending >= 125 days</option>
                     <option value="claims-pending-at-least-one-year">Claims Pending >= One Year</option>
-                    <option value="claims-pending-at-least-two-years">Claims Pending >= Two Years</option>
-                    <option value="claims-pending-at-least-two-years">Claims Pending >= Three Years</option>
-                    <option value="claims-pending-at-least-two-years">Claims Pending >= Four Years</option>
-                    <option value="claims-pending-at-least-two-years">Claims Pending >= Five Years</option>
                 </select>
-                <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Report</span></p>
             </div>
             <div class="header-item branding span4">
                 <a class="cir-logo" href="http://www.cironline.org" target="_blank">
@@ -153,6 +155,9 @@
             </div>
         </div>
         <div class="container-fluid">
+            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Report</span>
+            <a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a>
+            </p>
             <div id="put-stuff-here" class="row-fluid">
             </div>
         </div>
@@ -280,7 +285,7 @@
                         //set up query to ask for data type and by city
                         var opts = {
                             'city__slug': city.get("slug"),
-                            'limit': 130,
+                            'limit': 1000,
                             'field_type__slug': fieldType.fieldType
                         };
                         vaDataCollection.fetch({success: drawCharts, data:opts});
@@ -307,7 +312,7 @@
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
-                        'resourceUri': 'http://vetsapi.herokuapp.com/api/aspire/'
+                        'resourceUri': 'http://vetsapi.herokuapp.com/api/data/'
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
@@ -365,8 +370,8 @@
                     var title = $(element).find('option:selected').text();
                     var srcText = "Department of Veterans Affairs Monday Morning Report";
                     if(val === 'average-processing-time'){
-                        srcText = "Department of Veterans Affairs Aspire Dashboard";
-                    }else{
+                        srcText = "Department of Veterans Affairs Aspire Dashboard and internal VA documents obtained by CIR";
+                    }else if(val !== 'claims-pending-125-days'){
                         srcText = "Internal VA documents obtained by CIR"
                     }
                     $("#src-lbl").html(srcText);
