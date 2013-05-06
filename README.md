@@ -28,7 +28,7 @@ The exact fields follow:
 ```
 class FieldType(models.Model):
     '''
-    14 field types exist
+    10 field types exist
                     name                 |                slug                 
     -------------------------------------+-------------------------------------
      Completed Claims                    | completed-claims
@@ -40,10 +40,6 @@ class FieldType(models.Model):
      Claims received                     | claims-received
      Claims received average wait        | claims-received-average-wait
      Pending Claim                       | pending-claim
-     Claims pending at least two years   | claims-pending-at-least-two-years
-     Claims pending at least three years | claims-pending-at-least-three-years
-     Claims pending at least four years  | claims-pending-at-least-four-years
-     Claims pending at least five years  | claims-pending-at-least-five-years
      Claims Pending >= 125 Days          | claims-pending-125-days
     '''
 
