@@ -177,10 +177,10 @@
         <script src="js/app/va-data.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
+            $.support.cors = true;
             //save a few queries every change
             var cities = null;
             var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions, useCSV){
-                window.stop();//cancel any unfinished requests
                 var doCsv = useCSV !== undefined ? useCSV : false;
                 var lct = _.template($("#line-chart-template").html());
                 var ftc = _.template($("#field-type-container").html());
@@ -296,14 +296,18 @@
                     });
                 };
                 //get all the cities
+                var errorFunc = function(error){
+                    console.log(error);
+                };
                 if(cities.models.length <= 0){
-                    cities.fetch({success: foundCitiesCb, data:cityOptions.options});
+                    cities.fetch({success: foundCitiesCb, error: errorFunc, data:cityOptions.options});
                 }else{
                     foundCitiesCb();
                 }
             };
             $(document).ready(function(){
-                var csv = true;//toggle data source
+                //var csv = true;//toggle data source
+                var csv = cir.chartz.utils.getIEVersion() === -1;
                 $("#about-btn").unbind('click').bind('click', function(e){
                     $("#about").show();
                     return false;

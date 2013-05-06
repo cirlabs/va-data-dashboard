@@ -45,6 +45,16 @@ var VaDataCollection = Backbone.Collection.extend({
     parse: function(response) {
         return response.objects;
     },
+    sync: function(method, model, options) {
+        //jsonp to call from other domains
+        var params = _.extend({
+            type: 'GET',
+            dataType: 'jsonp',
+            url: model.url(),
+            processData: true
+        }, options);
+        return $.ajax(params);
+    },
     url: function(){
         return this.resourceUri;
     }
