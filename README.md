@@ -12,7 +12,7 @@ curl http://vetsapi.herokuapp.com/api/data/?format=json
 ```
 2. Download the spreadsheets hostd on Amazon s3
 ```
-http://vbl-staging-media.s3.amazonaws.com/data/[CITY]-[FIELD-TYPE].csv
+http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 ```
 3. Use our code to create your own apps. We've created [a few Backbone.js collections and models](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js) that you can use. An example can be found [here](https://github.com/cirlabs/va-data-dashboard)
 
@@ -134,7 +134,19 @@ Now, all the spreadsheets are segmented by city for each of the 14 field types. 
 http://vbl-staging-media.s3.amazonaws.com/data/portland-average-processing-time.csv
 ```
 
-The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type
+The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type.
+
+As noted, the url to access CSV documents follows this format:
+
+```
+http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
+```
+
+#Links
+http://www.vba.va.gov/REPORTS/mmwr/index.asp
+http://www.app.hospitalcompare.va.gov/index.cfm?org=vha
+http://cironline.org/veterans
+http://cironline.org/reports/map-where-veterans-backlog-worst-3792
 
 #Data notes
 
