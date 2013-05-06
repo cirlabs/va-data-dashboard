@@ -44,6 +44,15 @@ url = http://vetsapi.herokuapp.com/api/data/
 
 ```
 class City(models.Model):
+    '''
+    NOTE: Cities represent regional offices
+    Generally speaking, there is one regional office per state
+    serving all veterans.
+    This is not always the case. Large states like
+    California and Texas have multiple regional offices.
+    If you'd like to look up the regional office that serves your area
+    go to: http://www2.va.gov/directory/guide/home.asp?isflash=1
+    '''
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
 ```
@@ -109,6 +118,18 @@ for city in cities['objects']:
     print data
 ```
 
+For examples in Javascript, please see [index.html](https://github.com/cirlabs/va-data-dashboard/blob/master/index.html)
+
 #CSV data
 
+While the API provides more flexible access to the data it can be slow. For more reliable, fast access to the data we baked all the data into CSV files and store them on S3. Access to the data is on a per city, per field type basis much like the api though the format differs slightly. For instance, to get a list of all cities go to the following url:
 
+```
+http://vbl-staging-media.s3.amazonaws.com/data/cities.csv
+```
+
+Now, all the spreadsheets are segmented by city for each of the 14 field types. Following the example above, if you wanted to view all data points by field type 'average processing time' for the regional office in Portland, OR., look at the following url:
+
+```
+http://vbl-staging-media.s3.amazonaws.com/data/portland-average-processing-time.csv
+```
