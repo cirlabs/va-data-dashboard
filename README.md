@@ -1,6 +1,6 @@
 #Welcome!
 
-The Center for Investigative Reporting has led the nation's coverage on massive backlogs and delays in [processing veterans' disability claims by the Department of Veterans Affairs](http://cironline.org/veterans). We've developed a database -- which is [periodically updated](https://github.com/cirlabs/va-data-dashboard#data-updates) -- that includes various measurements of the amount of time each of the country's 58 regional office is taking to adjudicate pending claims. The data comes from internal documents leaked to CIR, documents obtained through Freedom of Information requests and publicly accessible documents hosted by The Department of Veterans Affairs. (What does "internal" mean here?)
+The Center for Investigative Reporting has led the nation's coverage on massive backlogs and delays in [processing veterans' disability claims by the Department of Veterans Affairs](http://cironline.org/veterans). We've developed a database -- which is [periodically updated](https://github.com/cirlabs/va-data-dashboard#data-updates) -- that includes various measurements of the amount of time each of the country's 58 regional office is taking to adjudicate pending claims. The data comes from internal documents leaked to CIR, documents obtained through Freedom of Information requests and publicly accessible documents hosted by The Department of Veterans Affairs. 
 
 ###Questions
 If you still have questions after reading this, email devdata@cironline.org
