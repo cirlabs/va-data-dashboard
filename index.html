@@ -236,7 +236,7 @@
                         var drawCharts = function(){
                             var divId = "line-chart-" + id;
                             var detailsDivId = "details-" +  id++;
-                            var shareUrl = 'http://citizen-media.s3.amazonaws.com/interactive/vets-dashboard/csv-loader.html#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
+                            var shareUrl = 'http://citizen-media.s3.amazonaws.com/interactive/vets-dashboard/index.html#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
                             var dataUrl = 'http://vbl-staging-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
                             var templateData = {
                                 'cityName': city.get('name'),
