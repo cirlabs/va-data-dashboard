@@ -95,6 +95,8 @@
                 padding: 10px;
                 width: 100%;
                 background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(img/lghtmesh.png);
+                box-sizing: border-box !important; 
+                padding-right: 70px;
             }
             .about-info{
                 width: 80%;
@@ -128,6 +130,7 @@
                     <li>Employees on duty: Number of claims staff working at the Veterans Service Center at each VA regional office.</li>
                     <li>Claims pending >= one year: The number of unprocessed claims at least a year old, including appeals.</li>
                 </ul>
+                <a href="https://github.com/cirlabs/va-data-dashboard">Powered by CIR's veterans API, get the source here!</a>
             </div>
         </div>
         <div class="header row-fluid">
@@ -372,7 +375,7 @@
                     var srcText = "Department of Veterans Affairs Monday Morning Workload Reports";
                     if(val === 'average-processing-time'){
                         srcText = "Department of Veterans Affairs ASPIRE dashboard and internal VA documents obtained by CIR";
-                    }else if(val !== 'claims-pending-125-days'){
+                    }else if(val !== 'claims-pending-125-days' && val !== 'pending-claim'){
                         srcText = "Internal VA documents obtained by CIR"
                     }
                     $("#src-lbl").html(srcText);

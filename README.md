@@ -9,7 +9,7 @@ If you still have questions after reading this, email devdata@cironline.org
 
 There are a few ways you can get ahold of the data:
 
-1. Directly accessing the API (see more about how to do this in in the URLs and schema section). This data is availble in JSON and JSONP.
+1. Directly accessing the API (see more about how to do this in in the URLs and schema section). This data is availble in JSON and JSONP formats.
 ```
 curl http://vetsapi.herokuapp.com/api/data/?format=json
 ```
@@ -123,7 +123,7 @@ For examples in Javascript, please see [index.html](https://github.com/cirlabs/v
 
 #CSV data
 
-While the API provides more flexible access to the data it can be slow. For more reliable, fast access to the data we baked all the data into CSV files and store them on S3. Access to the data is on a per city, per field type basis much like the api though the format differs slightly. For instance, to get a list of all cities go to the following url:
+While the API provides more flexible access to the data it can be slow. For more reliable, fast access to the data we baked it all into CSV files and stored them on S3. Access to the data is on a per city, per field type basis much like the api though the format differs slightly. For instance, to get a list of all cities go to the following url:
 
 ```
 http://vbl-staging-media.s3.amazonaws.com/data/cities.csv
