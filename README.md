@@ -144,8 +144,11 @@ http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 
 #Links
 http://www.vba.va.gov/REPORTS/mmwr/index.asp
+
 http://www.app.hospitalcompare.va.gov/index.cfm?org=vha
+
 http://cironline.org/veterans
+
 http://cironline.org/reports/map-where-veterans-backlog-worst-3792
 
 #Data notes
