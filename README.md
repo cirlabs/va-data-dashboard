@@ -53,6 +53,7 @@ url = http://vetsapi.herokuapp.com/api/city/
 
 There are 14 different types of fields in our database:
 
+```
                 name                 |                slug                 
 -------------------------------------+-------------------------------------
  Completed Claims                    | completed-claims
@@ -69,7 +70,7 @@ There are 14 different types of fields in our database:
  Claims pending at least four years  | claims-pending-at-least-four-years
  Claims pending at least five years  | claims-pending-at-least-five-years
  Claims Pending >= 125 Days          | claims-pending-125-days
-
+```
 
 #Querying the API and examples
 
