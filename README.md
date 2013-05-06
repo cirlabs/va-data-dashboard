@@ -145,6 +145,8 @@ As noted, the url to access CSV documents follows this format:
 http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 ```
 
+We've created two special Backbone.js classes to help you query and parse CSV data in your web browser. See them [here](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js#L78)
+
 #Links
 http://www.vba.va.gov/REPORTS/mmwr/index.asp
 
