@@ -1,6 +1,6 @@
 #Welcome!
 
-The Center for Investigative Reporting has led the nation's coverage on the extent and impact of the [veterans disability backlog](http://cironline.org/veterans). We've accumulated 36,600 rows of data pertaining to 58 regional offices across the country from internal and publicly accessible Department of Veterans' Affairs documents. Now, we're releasing this data through an API.
+The Center for Investigative Reporting has led the nation's coverage on massive backlogs and delays in [processing veterans' disability claims by the Department of Veterans Affairs](http://cironline.org/veterans). We've developed a database -- which is [periodically updated](https://github.com/cirlabs/va-data-dashboard#data-updates) -- that includes various measurements of the amount of time each of the country's 58 regional office is taking to adjudicate pending claims. The data comes from internal documents leaked to CIR, documents obtained through Freedom of Information requests and publicly accessible documents hosted by The Department of Veterans Affairs. (What does "internal" mean here?)
 
 ###Questions
 If you still have questions after reading this, email devdata@cironline.org
@@ -27,6 +27,26 @@ The exact fields follow:
 
 ```
 class FieldType(models.Model):
+    '''
+    14 field types exist
+                    name                 |                slug                 
+    -------------------------------------+-------------------------------------
+     Completed Claims                    | completed-claims
+     Average Processing Time             | average-processing-time
+     Appealed Claims                     | appealed-claims
+     Claims Completed per FTE            | claims-completed-per-fte
+     Employees on duty                   | employees-on-duty
+     Claims pending at least one year    | claims-pending-at-least-one-year
+     Claims received                     | claims-received
+     Claims received average wait        | claims-received-average-wait
+     Pending Claim                       | pending-claim
+     Claims pending at least two years   | claims-pending-at-least-two-years
+     Claims pending at least three years | claims-pending-at-least-three-years
+     Claims pending at least four years  | claims-pending-at-least-four-years
+     Claims pending at least five years  | claims-pending-at-least-five-years
+     Claims Pending >= 125 Days          | claims-pending-125-days
+    '''
+
     name = models.CharField(max_length=255)
     aspire_title = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
@@ -61,28 +81,6 @@ class City(models.Model):
 ```
 url = http://vetsapi.herokuapp.com/api/city/
 
-#Field types
-
-There are 14 different types of fields in our database:
-
-```
-                name                 |                slug                 
--------------------------------------+-------------------------------------
- Completed Claims                    | completed-claims
- Average Processing Time             | average-processing-time
- Appealed Claims                     | appealed-claims
- Claims Completed per FTE            | claims-completed-per-fte
- Employees on duty                   | employees-on-duty
- Claims pending at least one year    | claims-pending-at-least-one-year
- Claims received                     | claims-received
- Claims received average wait        | claims-received-average-wait
- Pending Claim                       | pending-claim
- Claims pending at least two years   | claims-pending-at-least-two-years
- Claims pending at least three years | claims-pending-at-least-three-years
- Claims pending at least four years  | claims-pending-at-least-four-years
- Claims pending at least five years  | claims-pending-at-least-five-years
- Claims Pending >= 125 Days          | claims-pending-125-days
-```
 
 #Querying the API and examples
 
@@ -147,6 +145,14 @@ http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 
 We've created two special Backbone.js classes to help you query and parse CSV data in your web browser. See them [here](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js#L78)
 
+#Data updates
+Fields accessible via publicly accessible web sites are updated weekly and monthly. The VA does not always publish data updates when they are expected so these intervals cannot be guaranteed.
+* Pending claims: updates weekly
+* Claims older than 125 days: updates weekly
+* Average processing time: updates weekly
+
+All other fields were obtained through Freedom of Information Act requests or through internal documents turned over to CIR and verified by the VA. Updates will be published as we receive and validate them.
+
 #Links
 http://www.vba.va.gov/REPORTS/mmwr/index.asp
 
@@ -159,7 +165,7 @@ http://cironline.org/reports/map-where-veterans-backlog-worst-3792
 #Data notes
 
 <ul>
-    <li>Veterans Waiting on a Disability Claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
+    <li>Veterans Waiting on a Disability Claim = pending claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
     <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
     <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
     <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
