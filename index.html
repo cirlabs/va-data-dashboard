@@ -244,7 +244,7 @@
                             });
                             $("#"+divId).on('mouseout', function(e){
                                 var ele = "#" + detailsDivId;
-                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details";
+                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details.";
                                 $(ele).html(str);
                             });
                             var lastDot = null;
@@ -398,12 +398,12 @@
                     <div class="share">
                         <div class="share-item">
                             <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= shareUrl %>" target="_blank">
-                                <i class="icon-twitter icon-28x"></i> tweet
+                                <i class="icon-twitter icon-28x"></i> Tweet
                             </a>
                         </div>
                         <div class="share-item">
                             <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
-                                <i class="icon-share icon-28x"></i> embed this 
+                                <i class="icon-share icon-28x"></i> Embed this 
                             </a>
                             <div id="embed-<%= detailsDivId %>" class="embed-box">
                                 <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
@@ -412,11 +412,11 @@
                             </div>
                         </div>
                         <div class="share-item">
-                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> download data
+                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> Download data
                             </a>
                         </div>
                     </div>
-                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details</div>
+                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details.</div>
                 </div>
                 <div id="<%= divId %>" class="line-chart"></div>
             </div>
