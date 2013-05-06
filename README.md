@@ -1,6 +1,6 @@
 #Welcome!
 
-The Center for Investigative Reporting has led the nation's coverage on the extent and impact of the (veterans disability backlog)[http://cironline.org/veterans]. We've accumulated 36,600 rows of data pertaining to 58 regional offices across the country from internal and publicly accessible Department of Veterans' Affairs documents. Now, we're releasing this data through an API.
+The Center for Investigative Reporting has led the nation's coverage on the extent and impact of the [veterans disability backlog](http://cironline.org/veterans). We've accumulated 36,600 rows of data pertaining to 58 regional offices across the country from internal and publicly accessible Department of Veterans' Affairs documents. Now, we're releasing this data through an API.
 
 #How to get the data
 
@@ -134,7 +134,7 @@ Now, all the spreadsheets are segmented by city for each of the 14 field types. 
 http://vbl-staging-media.s3.amazonaws.com/data/portland-average-processing-time.csv
 ```
 
-The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type.
+The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type
 
 #Data notes
 
