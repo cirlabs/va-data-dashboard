@@ -13,7 +13,7 @@ VaDashboard.templates.details['claims-pending-at-least-two-years'] = '<%= value 
 VaDashboard.templates.details['claims-pending-at-least-three-years'] = '<%= value %> unprocessed claims at least three years old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-four-years'] = '<%= value %> unprocessed claims at least four years old as of <%= date %>';
 VaDashboard.templates.details['claims-pending-at-least-five-years'] = '<%= value %> unprocessed claims at least five years old as of <%= date %>';
-VaDashboard.templates.details['claims-received'] = '<%= value %> claims received by the VA by month as of <%= date %>';
+VaDashboard.templates.details['claims-received'] = '<%= value %> claims received by the VA per month as of <%= date %>';
 VaDashboard.templates.details['claims-received-average-wait'] = 'Veterans filing a claim for the first time wait an average of <%= value %> days as of <%= date %>';
 VaDashboard.templates.details['claims-pending-125-days'] = '<%= value %> unprocessed claims at least 125 days old as of <%= date %>';
 
