@@ -6,7 +6,7 @@ The Center for Investigative Reporting has led the nation's coverage on the exte
 
 There are a few ways you can get ahold of the data:
 
-1. Directly accessing the API (see more about how to do this in in the URLs, Schema section). This data is availble in JSON and JSONP.
+1. Directly accessing the API (see more about how to do this in in the URLs and schema section). This data is availble in JSON and JSONP.
 ```
 curl http://vetsapi.herokuapp.com/api/data/?format=json
 ```
@@ -16,7 +16,7 @@ http://vbl-staging-media.s3.amazonaws.com/data/[CITY]-[FIELD-TYPE].csv
 ```
 3. Use our code to create your own apps. We've created [a few Backbone.js collections and models](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js) that you can use. An example can be found [here](https://github.com/cirlabs/va-data-dashboard)
 
-#URLs and Schema
+#URLs and schema
 
 The data is organized as three different models: A time-series data model, a city model (technically a regional office, more later) representing the location of the data model, and field type model to differentiate between the different data types.
 
@@ -133,3 +133,19 @@ Now, all the spreadsheets are segmented by city for each of the 14 field types. 
 ```
 http://vbl-staging-media.s3.amazonaws.com/data/portland-average-processing-time.csv
 ```
+
+The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type.
+
+#Data notes
+
+<ul>
+    <li>Veterans Waiting on a Disability Claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
+    <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
+    <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
+    <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
+    <li>Completed claims: The number of claims processed by the VA by month.</li>
+    <li>Claims received: The number of claims received by the VA by month.</li>
+    <li>Claims completed per FTE: The number of claims processed per VA claims employee over the course of a year.</li>
+    <li>Employees on duty: Number of claims staff working at the Veterans Service Center at each VA regional office.</li>
+    <li>Claims pending >= one year: The number of unprocessed claims at least a year old, including appeals.</li>
+</ul> 
