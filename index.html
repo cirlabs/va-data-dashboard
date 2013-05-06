@@ -78,9 +78,8 @@
                 height: 50%;
             }
             .branding a{
-                position: absolute;
-                right: 15px;
-                top: 10px;
+                float: right;
+                padding: 10px;
             }
             .share{
                 margin: 10px 0;
@@ -112,8 +111,8 @@
         </style>
     </head>
     <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <!--[if lt IE 9]>
+            <p class="chromeframe row-fluid">You are using an <strong>outdated</strong> browser. Some or all of the features on this web site may not be accessible. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
         <div id="about" class="row-fluid">
             <a href="#" id="close-about-btn">X</a>
@@ -131,6 +130,7 @@
                     <li>Claims pending >= one year: The number of unprocessed claims at least a year old, including appeals.</li>
                 </ul>
                 <a href="https://github.com/cirlabs/va-data-dashboard">Powered by CIR's veterans API, get the source here!</a>
+                <br/>If you'd like to look up the regional office that serves your area visit <a href="http://www2.va.gov/directory/guide/home.asp?isflash=1" target="_blank">this site</a>.
             </div>
         </div>
         <div class="header row-fluid">
@@ -169,7 +169,7 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
-        <script src="js/d3min.js"></script>
+        <script src="js/d3.v2.min.js"></script>
         <script src="js/underscore-min.js"></script>
         <script src="js/backbone-min.js"></script>
         <script src="js/raphael.js"></script>
