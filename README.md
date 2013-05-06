@@ -22,14 +22,14 @@ The data is organized as three different models: A time-series data model, a cit
 
 The exact fields follow:
 
-'''
+```
 class FieldType(models.Model):
     name = models.CharField(max_length=255)
     aspire_title = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
-'''
+```
 
-'''
+```
 class AspireField(models.Model):
     region = models.ForeignKey('collector.Region')
     city = models.ForeignKey('collector.City')
@@ -38,10 +38,10 @@ class AspireField(models.Model):
     national_avg = models.FloatField()
     date = models.DateField()
     created = models.DateTimeField()
-'''
+```
 
-'''
+```
 class City(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
-'''
+```
