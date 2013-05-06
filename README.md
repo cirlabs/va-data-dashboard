@@ -10,13 +10,17 @@ If you still have questions after reading this, email devdata@cironline.org
 There are a few ways you can get ahold of the data:
 
 1. Directly accessing the API (see more about how to do this in in the URLs and schema section). This data is availble in JSON and JSONP.
+
 ```
 curl http://vetsapi.herokuapp.com/api/data/?format=json
 ```
-2. Download the spreadsheets hostd on Amazon s3
+
+2. Download the spreadsheets hosted on Amazon s3. See section on [CSV data](https://github.com/cirlabs/va-data-dashboard#csv-data)
+
 ```
 http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 ```
+
 3. Use our code to create your own apps. We've created [a few Backbone.js collections and models](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js) that you can use. An example can be found [here](https://github.com/cirlabs/va-data-dashboard)
 
 #URLs and schema
