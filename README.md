@@ -2,6 +2,9 @@
 
 The Center for Investigative Reporting has led the nation's coverage on the extent and impact of the [veterans disability backlog](http://cironline.org/veterans). We've accumulated 36,600 rows of data pertaining to 58 regional offices across the country from internal and publicly accessible Department of Veterans' Affairs documents. Now, we're releasing this data through an API.
 
+###Questions
+If you still have questions after reading this, email devdata@cironline.org
+
 #How to get the data
 
 There are a few ways you can get ahold of the data:
