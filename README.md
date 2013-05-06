@@ -118,7 +118,7 @@ for city in cities['objects']:
     print data
 ```
 
-For examples in Javascript, please see [index.html](https://github.com/cirlabs/va-data-dashboard/blob/master/index.html)
+For examples in Javascript, please see [index.html](https://github.com/cirlabs/va-data-dashboard/blob/master/index.html#L178)
 
 #CSV data
 
