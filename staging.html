@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,700' rel='stylesheet' type='text/css'>
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <!--[if IE 7]>
+        <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
+        <![endif]-->
+        <style>
+            body{
+                font-family: 'Open Sans', sans-serif;
+            }
+            .line-chart-container{
+                height: 250px;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 50px;
+            }
+            .line-chart{
+                height: 200px;
+                width: 100%;
+            }
+            .x-axis,
+            .y-axis path,
+            .y-axis line {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
+            }
+            .chart-details{
+                text-align: center;
+                color: #9B9B9B;
+            }
+            .details-container{
+                height: 100px;
+            }
+            .details-container h3{
+                margin-bottom: -5px;
+            }
+            .embed-box{
+                display: none;
+                border: 1px solid black;
+                width: 50%;
+                position: absolute;
+                right: 20%;
+                background-color: white;
+                z-index: 10;
+            }
+            .header{
+                width: 100%;
+                background: #EEEEEE;
+                border-bottom: 1px solid #CCC;
+                background: rgba(255,255,255,0.75);
+                background: -moz-linear-gradient(top,rgba(255,255,255,0.75) 0%, rgba(220,220,220,0.75) 100%), url(../img/lghtmesh.png);
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.75)), color-stop(100%,rgba(220,220,220,0.75))), url(../img/lghtmesh.png);
+                background: -webkit-linear-gradient(top,  rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(../img/lghtmesh.png);
+                background: -o-linear-gradient(top,  rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(../img/lghtmesh.png);
+                background: -ms-linear-gradient(top,  rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(../img/lghtmesh.png);
+                background: linear-gradient(to bottom,  rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(../img/lghtmesh.png);
+                text-shadow: 0px 1px 0px white;
+                box-shadow:  0px 1px 1px 0px rgba(0, 0, 0, .1);
+            }
+            .header-item{
+                padding: 5px;
+                text-align: center;
+            }
+            .header-item p{
+                margin-top: -10px;
+            }
+            .branding img{
+                height: 50%;
+            }
+            .branding a{
+                float: right;
+                padding: 10px;
+            }
+            .share{
+                margin: 10px 0;
+            }
+            .share-item{
+                display: inline;
+                padding-right: 5px;
+            }
+            #about{
+                display: none;
+                background-color: white;
+                padding: 10px;
+                width: 100%;
+                background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(220,220,220,0.75) 100%), url(img/lghtmesh.png);
+                box-sizing: border-box !important; 
+                padding-right: 70px;
+            }
+            .about-info{
+                width: 80%;
+            }
+            #close-about-btn{
+                font-size: 120%;
+                font-weight:900;
+            }
+            .src-info{
+                font-size: 100%;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 9]>
+            <p class="chromeframe row-fluid">You are using an <strong>outdated</strong> browser. Some or all of the features on this web site may not be accessible. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        <div id="about" class="row-fluid">
+            <a href="#" id="close-about-btn">X</a>
+            <div class="about-info span12">
+                The API reports the following fields:
+                <ul>
+                    <li>Veterans waiting on a disability claim: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
+                    <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
+                    <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
+                    <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if he or she was denied the original claim and had to appeal.</li>
+                    <li>Completed claims: The number of claims processed by the VA by month.</li>
+                    <li>Claims received: The number of claims received by the VA by month.</li>
+                    <li>Claims completed per FTE: The number of claims processed per VA claims employee over the course of a year.</li>
+                    <li>Employees on duty: Number of claims staff working at the Veterans Service Center at each VA regional office.</li>
+                    <li>Claims pending >= one year: The number of unprocessed claims at least a year old, including appeals.</li>
+                </ul>
+                <a href="https://github.com/cirlabs/va-data-dashboard">Powered by CIR's veterans API, get the source here!</a>
+                <br/>If you'd like to look up the regional office that serves your area visit <a href="http://www2.va.gov/directory/guide/home.asp?isflash=1" target="_blank">this site</a>.
+            </div>
+        </div>
+        <div class="header row-fluid">
+            <div class="header-item span4">
+                <h3>VA Data Dashboard</h3>
+            </div>
+            <div class="header-item span4">
+                Selected data point:
+                <select id="change-field-type">
+                    <option value="pending-claim">Veterans waiting on a disability claim</option>
+                    <option value="average-processing-time">Average processing time</option>
+                    <option value="claims-received-average-wait">Average wait for new claims</option>
+                    <option value="appealed-claims">Average time to decide an appeal</option>
+                    <option value="completed-claims">Completed claims</option>
+                    <option value="claims-received">Claims received</option>
+                    <option value="claims-completed-per-fte">Claims completed per FTE</option>
+                    <option value="employees-on-duty">Employees on duty</option>
+                    <option value="claims-pending-125-days">Claims pending at least 125 days old</option>
+                    <option value="claims-pending-at-least-one-year">Claims pending at least one year old</option>
+                </select>
+            </div>
+            <div class="header-item branding span4">
+                <a class="cir-logo" href="http://www.cironline.org" target="_blank">
+                    <img src="img/CIRLogoTrans.png" alt="Powered by the Center for Investigative Reporting">
+                </a>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <p class="src-info">Source: <span id="src-lbl">Department of Veterans Affairs Monday Morning Workload Reports</span>
+            <a href="#" id="about-btn"><i class="icon-question-sign icon-28x"></i></a>
+            </p>
+            <div id="put-stuff-here" class="row-fluid">
+            </div>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/d3.v2.min.js"></script>
+        <script src="js/underscore-min.js"></script>
+        <script src="js/backbone-min.js"></script>
+        <script src="js/raphael.js"></script>
+        <script src="js/chartz.js"></script>
+        <script src="js/app/va-data-staging.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            $.support.cors = true;
+            //save a few queries every change
+            var cities = null;
+            var buildCharts = function(chartsContainer, fieldType, cityOptions, graphOptions, useCSV){
+                var doCsv = useCSV !== undefined ? useCSV : false;
+                var lct = _.template($("#line-chart-template").html());
+                var ftc = _.template($("#field-type-container").html());
+                $(chartsContainer).empty();
+                var ftcData = {
+                    'fieldType': fieldType.name
+                };
+                $(chartsContainer).append(ftc(ftcData));
+                var formatTime = d3.time.format("%m/%d/%Y");
+                var commaFormat = d3.format(",1r");
+                var getAxis = function(container, dim){
+                    var yscale = d3.scale.linear()
+                        .domain([dim.minY, dim.maxY])
+                        .range([dim.tallestY, dim.shortestY]);
+                    var xscale = d3.scale.linear()
+                        .domain([dim.minX, dim.maxX])
+                        .range([dim.startXPos, dim.endXPos])
+                    var yOpts = {
+                        'text': '',
+                    };
+                    cir.chartz.utils.getYAxis(d3.select($(container).children()[0]), yscale, yOpts);
+                    var xaxis = cir.chartz.utils.getXAxis(d3.select($(container).children()[0]), xscale, $(container).height() - dim.bottom);
+                };
+                cities = cities === null ? (doCsv ? new VaCSVCitiesCollection([],{}) : new VaDataCollection([], cityOptions)) : cities;
+                var foundCitiesCb = function(){
+                    var itemsContainer = $("#put-chartz-here");
+                    var id = 0;
+                    var models = cities.models;
+                    if(cityOptions.options.slug !== undefined){
+                        models = _.filter(cities.models, function(city){
+                            return city.get("slug") === cityOptions.options.slug;
+                        });
+                    }
+                    models = _.sortBy(models, function(obj){
+                        return obj.get("slug");
+                    });
+                    _.each(models, function(city){
+                        var vaDataCollection = !doCsv ? new VaDataCollection([], fieldType) : new VaCSVDataCollection([], {
+                            fieldTypeSlug: fieldType.fieldType,
+                            citySlug: city.get("slug")
+                        });
+                        //using closures to simplify code
+                        var drawCharts = function(){
+                            var divId = "line-chart-" + id;
+                            var detailsDivId = "details-" +  id++;
+                            var shareUrl = 'http://citizen-media.s3.amazonaws.com/interactive/vets-dashboard/index.html#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
+                            var dataUrl = 'http://vbl-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
+                            var templateData = {
+                                'cityName': city.get('name'),
+                                'divId': divId,
+                                'detailsDivId': detailsDivId,
+                                'shareUrl': shareUrl,
+                                'fieldType': fieldType.name,
+                                'dataUrl': dataUrl,
+                                'encShareUrl': "http://cironline.org/vetsapi"
+                            };
+                            var htmlInsert = lct(templateData);
+                            itemsContainer.append(htmlInsert);
+                            var chart = cir.chartz.lineChart("#"+divId, vaDataCollection.models, graphOptions);
+                            getAxis("#"+divId, chart.dimensions);
+                            $("#"+divId).on('mouseover', function(e){
+                                chart.dots.animate({
+                                    'r': 3,
+                                }, 50);
+                            });
+                            $("#"+divId).on('mouseout', function(e){
+                                var ele = "#" + detailsDivId;
+                                var str = fieldType.name + " per reporting period.<br/>Hover over or touch the line for more details.";
+                                $(ele).html(str);
+                            });
+                            var lastDot = null;
+                            $("#"+divId).on('mousemove', function(e){
+                                var parentOffset = $(this).parent().offset();
+                                var relX = e.pageX - parentOffset.left;
+                                var dot = _.find(chart.dots, function(dot){
+                                    if(lastDot !== null){
+                                        if(relX > lastDot.attr().cx && relX <= dot.attr().cx){
+                                            return dot;
+                                        }
+                                    }
+                                    if(lastDot !== null){
+                                        lastDot.animate({
+                                            'stroke-width': '0',
+                                            'stroke': 'black',
+                                        }, 1);
+                                    }
+                                    lastDot = dot;
+                                });
+                                if(dot === null || dot === undefined)
+                                    dot = chart.dots[0];
+                                dot.animate({
+                                    'stroke-width': '4',
+                                    'stroke': 'red',
+                                }, 1);
+                                lastDot = dot;
+                                var ele = "#" + detailsDivId;
+                                var html = dot.data('obj').getDetailTemplate(formatTime, commaFormat)
+                                $(ele).html(html);
+                            });
+                            $("#"+divId).on('mouseout', function(e){
+                                chart.dots.animate({
+                                    'r': 0
+                                }, 50);
+                            });
+                        };
+                        //set up query to ask for data type and by city
+                        var opts = {
+                            'city__slug': city.get("slug"),
+                            'limit': 1000,
+                            'field_type__slug': fieldType.fieldType
+                        };
+                        vaDataCollection.fetch({success: drawCharts, data:opts});
+                    });
+                };
+                //get all the cities
+                var errorFunc = function(error){
+                    console.log(error);
+                };
+                if(cities.models.length <= 0){
+                    cities.fetch({success: foundCitiesCb, error: errorFunc, data:cityOptions.options});
+                }else{
+                    foundCitiesCb();
+                }
+            };
+            $(document).ready(function(){
+                //var csv = true;//toggle data source
+                var csv = cir.chartz.utils.getIEVersion() === -1;
+                $("#about-btn").unbind('click').bind('click', function(e){
+                    $("#about").show();
+                    return false;
+                });
+                $("#close-about-btn").unbind('click').bind('click', function(e){
+                    $("#about").hide();
+                    return false;
+                });
+                var aspireSettings = {
+                    fieldTypeOptions: {
+                        'name': 'Pending Claims',
+                        'fieldType': 'pending-claim',
+                        'resourceUri': 'http://vetsapi.apps.cironline.org/api/data/'
+                    },
+                    graphOptions: {
+                        key: function(entry){return new Date(entry.get("date"));},
+                        value: function(entry){return parseFloat(entry.get('value'));},
+                        strokeColor: 'white',
+                        fillOpacity: .05,
+                        radius: 0,
+                        bottom: 50
+                    }
+                };
+                var cityOptions = {
+                    'resourceUri': 'http://vetsapi.apps.cironline.org/api/city/',
+                    'options': {
+                        limit: 130
+                    }
+                };
+                var Workspace = Backbone.Router.extend({
+                    routes: {
+                        "": "home",
+                        "city/:slug": "cityDisplay",
+                        "field-type/:fieldType": "displayField",
+                        "field-type/:fieldType/city/:slug": "displayCityField"
+                    },
+                    home: function(){
+                        cityOptions.options = {limit: 130};
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
+                    },
+                    cityDisplay: function(slug){
+                        cityOptions.options = {'slug': slug, limit: 130};
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);             
+                    },
+                    displayField: function(fieldType){
+                        $("#change-field-type").val(fieldType);
+                        aspireSettings.fieldTypeOptions.name = fieldType;
+                        aspireSettings.fieldTypeOptions.fieldType = fieldType;
+                        aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
+                        cityOptions.options = {limit: 130};
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
+                    },
+                    displayCityField: function(fieldType, slug){
+                        cityOptions.options = {'slug': slug, limit: 130};
+                        //this.displayField(fieldType);
+                        $("#change-field-type").val(fieldType);
+                        aspireSettings.fieldTypeOptions.name = fieldType;
+                        aspireSettings.fieldTypeOptions.fieldType = fieldType;
+                        aspireSettings.graphOptions.left = fieldType === 'appealed-claims' ? 50 : 0;
+                        buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
+                    }
+                });
+                var workspace = new Workspace();
+                Backbone.history.start();
+                $("#change-field-type").on("change", function(){
+                    var element = $(this);
+                    var val = $(element).val();
+                    var title = $(element).find('option:selected').text();
+                    var srcText = "Department of Veterans Affairs Monday Morning Workload Reports";
+                    if(val === 'average-processing-time'){
+                        srcText = "Department of Veterans Affairs ASPIRE dashboard, Monday Morning Workload Reports and internal VA documents obtained by CIR";
+                    }else if(val !== 'claims-pending-125-days' && val !== 'pending-claim'){
+                        srcText = "Internal VA documents obtained by CIR"
+                    }
+                    $("#src-lbl").html(srcText);
+                    aspireSettings.fieldTypeOptions.name = title;
+                    aspireSettings.fieldTypeOptions.fieldType = val;
+                    aspireSettings.graphOptions.left = val === 'appealed-claims' ? 50 : 0;
+                    buildCharts("#put-stuff-here", aspireSettings.fieldTypeOptions, cityOptions, aspireSettings.graphOptions, csv);
+                    return false;
+                });
+            }); 
+        </script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-37583724-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        <script type="text/template" id="line-chart-template">
+            <div class="line-chart-container">
+                <div class="details-container">
+                    <h3><%= cityName.split(",")[0] %> <%if(cityName !== 'Nation') {%>VA Regional Office <%}%> </h3>
+                    <div class="share">
+                        <div class="share-item">
+                            <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= encShareUrl %>" target="_blank">
+                                <i class="icon-twitter icon-28x"></i> Tweet
+                            </a>
+                        </div>
+                        <div class="share-item">
+                            <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').show();return false;">
+                                <i class="icon-share icon-28x"></i> Embed this 
+                            </a>
+                            <div id="embed-<%= detailsDivId %>" class="embed-box">
+                                <a href="#" onclick="javascript:$('#embed-<%= detailsDivId %>').hide();return false;">x</a>
+                                Copy this code and paste it into your Web page:
+                                <input type="text" value='<iframe src="<%= shareUrl %>" frameborder="0" width="550px" height="500px"></iframe>'>
+                            </div>
+                        </div>
+                        <div class="share-item">
+                            <a href="<%= dataUrl %>"><i class="icon-cloud-download icon-28x"></i> Download data
+                            </a>
+                        </div>
+                    </div>
+                    <div id="<%= detailsDivId %>" class="chart-details"><%= fieldType %> per reporting period.<br/>Hover over or touch the line for more details.</div>
+                </div>
+                <div id="<%= divId %>" class="line-chart"></div>
+            </div>
+        </script>
+        <script type="text/template" id="field-type-container">
+            <div id="put-chartz-here"></div>
+        </script>
+    </body>
+</html>
