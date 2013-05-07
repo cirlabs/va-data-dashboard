@@ -237,7 +237,7 @@
                             var divId = "line-chart-" + id;
                             var detailsDivId = "details-" +  id++;
                             var shareUrl = 'http://citizen-media.s3.amazonaws.com/interactive/vets-dashboard/index.html#field-type/' + fieldType.fieldType + '/city/' + city.get("slug");
-                            var dataUrl = 'http://vbl-staging-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
+                            var dataUrl = 'http://vbl-media.s3.amazonaws.com/data/' + city.get("slug") + '-' + fieldType.fieldType + '.csv';
                             var templateData = {
                                 'cityName': city.get('name'),
                                 'divId': divId,
@@ -245,7 +245,7 @@
                                 'shareUrl': shareUrl,
                                 'fieldType': fieldType.name,
                                 'dataUrl': dataUrl,
-                                'encShareUrl': encodeURIComponent(shareUrl)
+                                'encShareUrl': "http://cironline.org/vetsapi"
                             };
                             var htmlInsert = lct(templateData);
                             itemsContainer.append(htmlInsert);
@@ -415,7 +415,7 @@
                     <h3><%= cityName.split(",")[0] %> <%if(cityName !== 'Nation') {%>VA Regional Office <%}%> </h3>
                     <div class="share">
                         <div class="share-item">
-                            <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= shareUrl %>" target="_blank">
+                            <a href="https://twitter.com/share?text=Check out the veterans backlog in <%= cityName %>&url=<%= encShareUrl %>" target="_blank">
                                 <i class="icon-twitter icon-28x"></i> Tweet
                             </a>
                         </div>

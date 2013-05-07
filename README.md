@@ -17,7 +17,7 @@ curl http://vetsapi.herokuapp.com/api/data/?format=json
 ```
 2. Download the spreadsheets hosted on Amazon s3. See section on [CSV data](https://github.com/cirlabs/va-data-dashboard#csv-data)
 ```
-http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
+http://vbl-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 ```
 3. Use our code to create your own apps. We've created [a few Backbone.js collections and models](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js) that you can use. An example can be found [here](https://github.com/cirlabs/va-data-dashboard)
 
@@ -124,13 +124,13 @@ For examples in Javascript, please see [index.html](https://github.com/cirlabs/v
 While the API provides more flexible access to the data it can be slow. For more reliable, fast access to the data we baked it all into CSV files and stored them on S3. Access to the data is on a per city, per field type basis much like the api though the format differs slightly. For instance, to get a list of all cities go to the following url:
 
 ```
-http://vbl-staging-media.s3.amazonaws.com/data/cities.csv
+http://vbl-media.s3.amazonaws.com/data/cities.csv
 ```
 
 Now, all the spreadsheets are segmented by city for each of the 14 field types. Following the example above, if you wanted to view all data points by field type 'average processing time' for the regional office in Portland, OR., look at the following url:
 
 ```
-http://vbl-staging-media.s3.amazonaws.com/data/portland-average-processing-time.csv
+http://vbl-media.s3.amazonaws.com/data/portland-average-processing-time.csv
 ```
 
 The downside to using CSV data is no aggregate file for all data points about 'average processing time', or any other field type. To obtain the entire data set for a given field type, iterate over the list of cities requesting each file for the given field type.
@@ -138,7 +138,7 @@ The downside to using CSV data is no aggregate file for all data points about 'a
 As noted, the url to access CSV documents follows this format:
 
 ```
-http://vbl-staging-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
+http://vbl-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 ```
 
 We've created two special Backbone.js classes to help you query and parse CSV data in your web browser. See them [here](https://github.com/cirlabs/va-data-dashboard/blob/master/js/app/va-data.js#L78)

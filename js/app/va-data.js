@@ -98,7 +98,7 @@ var VaCSVDataCollection = Backbone.Collection.extend({
         return parseCSV(response);
     },
     url: function(){
-        return "http://vbl-staging-media.s3.amazonaws.com/data/" + this.citySlug + "-" + this.fieldTypeSlug + ".csv";
+        return "http://vbl-media.s3.amazonaws.com/data/" + this.citySlug + "-" + this.fieldTypeSlug + ".csv";
     }
 });
 var VaCSVCitiesCollection = Backbone.Collection.extend({
@@ -112,6 +112,6 @@ var VaCSVCitiesCollection = Backbone.Collection.extend({
         return parseCSV(response);
     },
     url: function(){
-        return "http://vbl-staging-media.s3.amazonaws.com/data/cities.csv";
+        return "http://vbl-media.s3.amazonaws.com/data/cities.csv";
     }
 });
