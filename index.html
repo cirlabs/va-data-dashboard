@@ -330,7 +330,7 @@
                     fieldTypeOptions: {
                         'name': 'Pending Claims',
                         'fieldType': 'pending-claim',
-                        'resourceUri': 'http://vetsapi.herokuapp.com/api/data/'
+                        'resourceUri': 'http://vetsapi.apps.cironline.org/api/data/'
                     },
                     graphOptions: {
                         key: function(entry){return new Date(entry.get("date"));},
@@ -342,7 +342,7 @@
                     }
                 };
                 var cityOptions = {
-                    'resourceUri': 'http://vetsapi.herokuapp.com/api/city/',
+                    'resourceUri': 'http://vetsapi.apps.cironline.org/api/city/',
                     'options': {
                         limit: 130
                     }
@@ -388,7 +388,7 @@
                     var title = $(element).find('option:selected').text();
                     var srcText = "Department of Veterans Affairs Monday Morning Workload Reports";
                     if(val === 'average-processing-time'){
-                        srcText = "Department of Veterans Affairs ASPIRE dashboard and internal VA documents obtained by CIR";
+                        srcText = "Department of Veterans Affairs ASPIRE dashboard, Monday Morning Workload Reports and internal VA documents obtained by CIR";
                     }else if(val !== 'claims-pending-125-days' && val !== 'pending-claim'){
                         srcText = "Internal VA documents obtained by CIR"
                     }
