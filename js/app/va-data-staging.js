@@ -5,6 +5,7 @@ VaDashboard.templates.details = {};
 VaDashboard.templates.details['pending-claim'] = '<%= value %> veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military on <%= date %>';
 VaDashboard.templates.details['appealed-claims'] = 'Veterans who file an appeal to their claim wait <%= value %> days on average for a response from the VA if they were denied their original claim and had to appeal as of <%= date %>';
 VaDashboard.templates.details['average-processing-time'] = 'Veterans wait <%= value %> days on average as of <%= date %> for a response to their disability claim';
+VaDashboard.templates.details['average-days-pending'] = 'A claim has been in the VA system for <%= value %> days on average as of <%= date %>';
 VaDashboard.templates.details['completed-claims'] = '<%= value %> claims processed per month as of <%= date %>';
 VaDashboard.templates.details['claims-completed-per-fte'] = 'On average, claims processors complete <%= value %> claims per year as of <%= date %>';
 VaDashboard.templates.details['employees-on-duty'] = '<%= value %> claims staff working the veterans service center as of <%= date %>';
