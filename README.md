@@ -162,7 +162,8 @@ http://cironline.org/reports/map-where-veterans-backlog-worst-3792
 
 #Data notes
 
-*Pending Claims and claims received average wait are referred to as 'Veterans waiting on a disability claim' and 'Average wait for new claims'.
+*'Pending Claims' and 'claims received average wait' are referred to as 'Veterans waiting on a disability claim' and 'Average wait for new claims," respectively.
+
 <ul>
     <li>*Veterans waiting on a disability claim = Pending Claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
     <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
