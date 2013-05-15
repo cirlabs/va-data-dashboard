@@ -25,8 +25,7 @@ http://vbl-media.s3.amazonaws.com/data/[CITY-SLUG]-[FIELD-TYPE-SLUG].csv
 
 The data is organized as three different models: A time-series data model, a city model (technically a regional office, more later) representing the location of the data model, and field type model to differentiate between the different data types.
 
-The exact fields follow:
-*indicates exceptions for this field type, please see [data notes](https://github.com/cirlabs/va-data-dashboard#data-notes)
+The exact fields follow, '*' indicates exceptions for this field type, please see [data notes](https://github.com/cirlabs/va-data-dashboard#data-notes):
 
 ```
 class FieldType(models.Model):
