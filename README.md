@@ -13,7 +13,7 @@ There are a few ways you can get ahold of the data:
 
 1. Directly accessing the API (see more about how to do this in in the URLs and schema section). This data is availble in JSON and JSONP formats.
 ```
-curl http://vetsapi.herokuapp.com/api/data/?format=json
+curl http://vetsapi.apps.cironline.org/api/data/?format=json
 ```
 2. Download the spreadsheets hosted on Amazon s3. See section on [CSV data](https://github.com/cirlabs/va-data-dashboard#csv-data)
 ```
@@ -30,6 +30,7 @@ The exact fields follow:
 ```
 class FieldType(models.Model):
     '''
+    * indicates exceptions for this field type, please see [data notes](https://github.com/cirlabs/va-data-dashboard#data-notes)
     10 field types exist
                     name                 |                slug                 
     -------------------------------------+-------------------------------------
@@ -40,8 +41,8 @@ class FieldType(models.Model):
      Employees on duty                   | employees-on-duty
      Claims pending at least one year    | claims-pending-at-least-one-year
      Claims received                     | claims-received
-     Claims received average wait        | claims-received-average-wait
-     Pending Claim                       | pending-claim
+     *Claims received average wait        | claims-received-average-wait
+     *Pending Claim                       | pending-claim
      Claims Pending >= 125 Days          | claims-pending-125-days
     '''
 
@@ -49,7 +50,7 @@ class FieldType(models.Model):
     aspire_title = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
 ```
-url = http://vetsapi.herokuapp.com/api/field-type/
+url = http://vetsapi.apps.cironline.org/api/field-type/
 
 
 ```
@@ -60,7 +61,7 @@ class TimeSeriesData(models.Model):
     date = models.DateField()
     created = models.DateTimeField()
 ```
-url = http://vetsapi.herokuapp.com/api/data/
+url = http://vetsapi.apps.cironline.org/api/data/
 
 
 ```
@@ -77,7 +78,7 @@ class City(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from=('name',))
 ```
-url = http://vetsapi.herokuapp.com/api/city/
+url = http://vetsapi.apps.cironline.org/api/city/
 
 
 #Querying the API and examples
@@ -87,19 +88,19 @@ Note: we use Tastypie to expose our data sets. This tutorial is brief and you ca
 Accessing any of the above URLs will return a paginated list of data. Those lists can be filtered by adding parameters to the end of the url. For instance, maybe you'd like to see data points concerning the average time a veteran waits for a response from the VA, in your console type:
 
 ```
-curl 'http://vetsapi.herokuapp.com/api/data/?format=json&field_type__slug=average-processing-time'
+curl 'http://vetsapi.apps.cironline.org/api/data/?format=json&field_type__slug=average-processing-time'
 ```
 
 Which will return the 20 most recent average processing time data points. To get the next 20 items issue the following command:
 
 ```
-curl 'http://vetsapi.herokuapp.com/api/data/?format=json&field_type__slug=average-processing-time&offset=20'
+curl 'http://vetsapi.apps.cironline.org/api/data/?format=json&field_type__slug=average-processing-time&offset=20'
 ```
 
 Or maybe you'd like see the average processing time for the regional office (city) in Portland, OR:
 
 ```
-curl 'http://vetsapi.herokuapp.com/api/data/?format=json&field_type__slug=average-processing-time&city__slug=portland'
+curl 'http://vetsapi.apps.cironline.org/api/data/?format=json&field_type__slug=average-processing-time&city__slug=portland'
 ```
 
 You can programatically access the API as follows:
@@ -109,10 +110,10 @@ Python using the requests library and simplejson
 import requests
 import simplejson
 
-response = requests.get('http://vetsapi.herokuapp.com/api/city/')
+response = requests.get('http://vetsapi.apps.cironline.org/api/city/')
 cities = simplejson.loads(response.content)
 for city in cities['objects']:
-    response = requests.get('http://vetsapi.herokuapp.com/api/data/?city__slug=%s' % city['slug'])
+    response = requests.get('http://vetsapi.apps.cironline.org/api/data/?city__slug=%s' % city['slug'])
     data = simplejson.loads(response.content)
     print data
 ```
@@ -162,10 +163,11 @@ http://cironline.org/reports/map-where-veterans-backlog-worst-3792
 
 #Data notes
 
+*Pending Claims and claims received average wait are referred to as 'Veterans waiting on a disability claim' and 'Average wait for new claims'.
 <ul>
-    <li>Veterans Waiting on a Disability Claim = pending claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
+    <li>*Veterans waiting on a disability claim = Pending Claims: The number of veterans waiting for a response from the VA for compensation for a disease, injury or illness linked to service in the military. Nationally, this number also includes about 10,000 survivors and other family members seeking compensation related to service-related injuries and diseases.</li>
     <li>Average processing time: The average number of days a veteran waits for a decision from the VA.</li>
-    <li>Average wait for new claims: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
+    <li>*Average wait for new claims = Claims received average wait: The average number of days a veteran filing a claim for the first time waits for a response from the VA.</li>
     <li>Average time to decide an appeal: The average number of days a veteran waits for a response from the VA if they were denied their original claim and had to appeal.</li>
     <li>Completed claims: The number of claims processed by the VA by month.</li>
     <li>Claims received: The number of claims received by the VA by month.</li>
